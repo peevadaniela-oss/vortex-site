@@ -166,9 +166,9 @@ async function makeViewer() {
   scene.add(bed, grid);
 
   // frame the Large size, so changing the size visibly changes the model
-  camera.position.set(0, 95, 150);
+  camera.position.set(0, 120, 215);
   const controls = new OrbitControls(camera, canvas);
-  controls.target.set(0, 30, 0);
+  controls.target.set(0, 42, 0);
   controls.enableDamping = true;
   controls.enablePan = false;
   controls.minDistance = 70;
@@ -199,7 +199,11 @@ async function makeViewer() {
       this.clear();
       model = gltf.scene;
       // printed in one colour, so the AI's own colours are replaced by the filament colour
-      model.traverse((o) => { if (o.isMesh) { o.material = material; o.castShadow = false; } });
+      model.traverse((o) => {
+        if (!o.isMesh) return;
+        o.material = material;
+        if (!o.geometry.attributes.normal) o.geometry.computeVertexNormals();
+      });
       const box = new THREE.Box3().setFromObject(model), size = box.getSize(new THREE.Vector3()), centre = box.getCenter(new THREE.Vector3());
       model.position.set(-centre.x, -box.min.y, -centre.z); // stand it on the bed
       unit = 1 / Math.max(size.x, size.y, size.z, 1e-6);
