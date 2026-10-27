@@ -1,0 +1,32 @@
+/* AI model maker (create-your-own page) */
+.ai-maker { display: grid; grid-template-columns: 1fr 1.1fr; gap: 24px; padding: 20px; align-items: start; }
+.ai-maker.card:hover { animation: none; border-color: var(--line); box-shadow: none; }
+.ai-ask, .ai-result, .ai-buy { display: grid; gap: 12px; align-content: start; }
+.ai-ask textarea { font: inherit; padding: 12px; border-radius: 12px; border: 2px solid var(--brand); background: #0f0a1c; color: #fff; resize: vertical; }
+.ai-ask textarea:focus { outline: none; border-color: var(--neon); box-shadow: 0 0 12px rgba(57, 255, 20, .5); }
+.ai-progress { height: 12px; border-radius: 999px; background: #0f0a1c; border: 1px solid var(--line); overflow: hidden; }
+.ai-progress[hidden] { display: none; }
+.ai-progress span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--brand), var(--pop), var(--neon)); transition: width .6s; }
+.ai-msg { margin: 0; font-weight: 800; min-height: 1.6em; }
+.ai-msg.error { color: #ff6b8a; }
+.ai-msg.ok { color: var(--neon); }
+.ai-stage { position: relative; aspect-ratio: 4 / 3; border-radius: 22px; overflow: hidden; background: radial-gradient(circle at 50% 35%, #2b1d52, #120c22 70%); border: 2px solid var(--pop); box-shadow: 0 0 24px rgba(0, 229, 255, .3); }
+.ai-stage canvas { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+.ai-stage-msg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0; padding: 24px; text-align: center; font-weight: 800; color: var(--muted); pointer-events: none; }
+.ai-stage-msg[hidden], .ai-buy[hidden], #ai-reset[hidden] { display: none; }
+.ai-buy .choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.ai-buy .choice { font: inherit; color: #fff; cursor: pointer; border-radius: 14px; padding: 8px 4px; background: #0f0a1c; border: 2px solid var(--line); display: grid; justify-items: center; gap: 2px; font-size: .85rem; font-weight: 800; }
+.ai-buy .choice small { font-weight: 600; color: var(--muted); }
+.ai-buy .choice[aria-pressed="true"] { border-color: var(--neon); background: rgba(57, 255, 20, .12); }
+.ai-buy .swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.ai-buy .swatch { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; background: var(--c); border: 3px solid #0f0a1c; outline: 2px solid var(--line); }
+.ai-buy .swatch[aria-pressed="true"] { outline: 3px solid var(--neon); transform: scale(1.12); }
+.ai-buy .swatch.glow { box-shadow: 0 0 10px var(--c); }
+.ai-price-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.ai-price-row .big-price { font-family: "Baloo 2", sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--neon); line-height: 1; }
+.ai-maker .btn { margin-top: 0; }
+#ai-reset { justify-self: start; }
+
+@media (max-width: 860px) {
+  .ai-maker { grid-template-columns: 1fr; }
+}

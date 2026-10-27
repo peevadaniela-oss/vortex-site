@@ -1,0 +1,105 @@
+/* Background designs 11-20 (second set, offered for the About me page). Put one class on <body>. */
+
+/* 11. Filament spools */
+body.bg-spools {
+  background:
+    repeating-radial-gradient(circle at 20% 30%, #ff7a59 0 6px, #ffb199 6px 12px, transparent 12px 200px),
+    repeating-radial-gradient(circle at 80% 70%, #6c4cf5 0 6px, #a594ff 6px 12px, transparent 12px 160px),
+    #fff3e6;
+}
+
+/* 12. Cloudy sky */
+body.bg-clouds {
+  background:
+    radial-gradient(ellipse 160px 60px at 15% 20%, #fff 0 98%, transparent),
+    radial-gradient(ellipse 110px 50px at 22% 16%, #fff 0 98%, transparent),
+    radial-gradient(ellipse 200px 70px at 70% 35%, #fff 0 98%, transparent),
+    radial-gradient(ellipse 120px 55px at 78% 30%, #fff 0 98%, transparent),
+    radial-gradient(ellipse 180px 60px at 40% 75%, #fff 0 98%, transparent),
+    radial-gradient(ellipse 100px 45px at 46% 70%, #fff 0 98%, transparent),
+    linear-gradient(180deg, #8fd3ff, #d9f1ff);
+}
+
+/* 13. Sketchbook paper */
+body.bg-sketchbook {
+  background:
+    linear-gradient(90deg, transparent 90px, rgba(255, 79, 109, .7) 90px 94px, transparent 94px),
+    repeating-linear-gradient(180deg, transparent 0 38px, rgba(0, 120, 220, .25) 38px 40px),
+    #fffdf6;
+}
+
+/* 14. Aurora */
+body.bg-aurora {
+  background:
+    radial-gradient(ellipse 60% 40% at 25% 30%, rgba(56, 198, 166, .7), transparent 70%),
+    radial-gradient(ellipse 50% 35% at 70% 25%, rgba(155, 92, 255, .7), transparent 70%),
+    radial-gradient(ellipse 60% 30% at 55% 60%, rgba(0, 179, 255, .45), transparent 70%),
+    #07122b;
+}
+
+/* 15. Retro checkerboard */
+body.bg-checker {
+  background:
+    conic-gradient(#ffd23f 25%, #ff7a59 0 50%, #ffd23f 0 75%, #ff7a59 0) 0 0 / 120px 120px;
+}
+
+/* 16. Rainbow arches */
+body.bg-arches {
+  background:
+    radial-gradient(circle at 50% 110%, #fff3e6 0 160px, #6c4cf5 161px 220px, #38c6a6 221px 280px, #ffd23f 281px 340px, #ff7a59 341px 400px, #ff4fa3 401px 460px, transparent 461px),
+    #fff3e6;
+}
+
+/* 17. Sparkles */
+body.bg-sparkles {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cpath d='M40 20 L45 35 L60 40 L45 45 L40 60 L35 45 L20 40 L35 35Z' fill='%23ffd23f'/%3E%3Cpath d='M130 100 L133 110 L143 113 L133 116 L130 126 L127 116 L117 113 L127 110Z' fill='%23ff4fa3'/%3E%3Ccircle cx='140' cy='30' r='4' fill='%236c4cf5'/%3E%3Ccircle cx='50' cy='140' r='3' fill='%2338c6a6'/%3E%3C/svg%3E"),
+    #efe7ff;
+}
+
+/* 18. Pink gingham */
+body.bg-gingham {
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 79, 163, .25) 0 30px, transparent 30px 60px),
+    repeating-linear-gradient(90deg, rgba(255, 79, 163, .25) 0 30px, transparent 30px 60px),
+    #fff;
+}
+
+/* 19. Topographic map */
+body.bg-topo {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cg fill='none' stroke-width='2'%3E%3Cpath d='M0 40 C100 10 150 70 200 40 S300 10 400 40' stroke='%2338c6a6' stroke-opacity='.6'/%3E%3Cpath d='M0 80 C100 50 150 110 200 80 S300 50 400 80' stroke='%23ffd23f' stroke-opacity='.45'/%3E%3Cpath d='M0 120 C100 90 150 150 200 120 S300 90 400 120' stroke='%2338c6a6' stroke-opacity='.6'/%3E%3Cpath d='M0 160 C100 130 150 190 200 160 S300 130 400 160' stroke='%239b5cff' stroke-opacity='.55'/%3E%3C/g%3E%3C/svg%3E"),
+    #0f2a2a;
+}
+
+/* 20. Neon synthwave grid (on Create your own, without the sun) */
+html body.bg-synthwave {
+  background:
+    linear-gradient(transparent 60%, rgba(255, 79, 216, .9) 60% calc(60% + 2px), transparent 0),
+    linear-gradient(rgba(255, 79, 216, .55) 2px, transparent 2px) 0 60% / 100% 40px,
+    linear-gradient(90deg, rgba(0, 229, 255, .45) 2px, transparent 2px) 0 0 / 80px 100%,
+    linear-gradient(180deg, #120428 0%, #2b0a52 60%, #12021f 100%);
+  background-attachment: fixed;
+}
+
+/* 20, live: synthwave.js draws the moving grid, stars, glow and ripples on a canvas over the plain sky. */
+html body.bg-synthwave.synth-live {
+  background: linear-gradient(180deg, #120428 0%, #2b0a52 58%, #12021f 100%);
+  background-attachment: fixed;
+}
+.synth-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+/* About me: one big ink smiley on white. smiley.js paints the smiley and the spreading ink on a canvas. */
+html body.bg-smiley {
+  background: #ffffff;
+  background-attachment: fixed;
+}
+.smiley-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+body.bg-smiley .site-footer { color: #23213a; border-top-color: rgba(35, 33, 58, .2); text-shadow: none; }
+/* Let the big smiley show through the About me boxes. */
+body.bg-smiley .ph,
+body.sun.bg-smiley .about > div:last-child { background: rgba(255, 255, 255, .2); color: #23213a; border-color: #23213a; }
+/* A white halo keeps the text readable when ink runs underneath it. */
+body.bg-smiley .about, body.bg-smiley .site-footer { text-shadow: 0 0 3px #fff, 0 0 6px #fff, 0 0 10px #fff; }
+body.sun.bg-smiley .about h1 { color: #23213a; }
+body.bg-smiley .ph small { color: #4a4760; }

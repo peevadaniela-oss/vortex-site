@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vortex Toys</title>
+<meta name="description" content="3D printed fidget toys for kids and families.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css?v=7">
+</head>
+<body class="home">
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="logo-swirl" aria-hidden="true"></span>Vortex Toys</a>
+    <nav>
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="create.html">Create your own</a>
+      <a href="design.html">Design your own</a>
+      <a href="about.html">About me</a>
+      <button class="cart-btn" id="cart-open" type="button">Cart (<span id="cart-count">0</span>)</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Fidget toys that beat <span>boredom</span></h1>
+        <p>Every toy is 3D printed, one layer at a time, then checked by hand before it ships. They bend, spin, click and wiggle, made for kids and families who like to keep their hands busy.</p>
+        <div class="cta-row">
+          <a class="btn" href="shop.html">Shop fidget toys</a>
+          <a class="btn secondary" href="about.html">Meet the maker</a>
+        </div>
+      </div>
+      <div class="ph">Hero photo goes here<small>e.g. a pile of colourful fidget toys</small></div>
+    </div>
+  </section>
+
+  <section class="kinetic" aria-label="Our toys">
+    <div class="marquee" data-speed="1"><div class="marquee-track">BEND <i>✦</i> SPIN <i>✦</i> CLICK <i>✦</i> WIGGLE <i>✦</i> SQUISH <i>✦</i> FLIP <i>✦</i>&nbsp;</div></div>
+    <div class="marquee alt" data-speed="-1.4"><div class="marquee-track">3D PRINTED <i>●</i> LAYER BY LAYER <i>●</i> MADE TO PLAY <i>●</i>&nbsp;</div></div>
+    <div class="wrap">
+      <p class="kinetic-hint">Hover over a toy</p>
+      <ul class="toy-list">
+        <li><a href="shop.html" data-color="#9b5cff" data-tag="Fidget toy">Articulated Dragon</a></li>
+        <li><a href="shop.html" data-color="#00e5ff" data-tag="Fidget toy">Infinity Cube</a></li>
+        <li><a href="shop.html" data-color="#39ff14" data-tag="Fidget toy">Gear Spinner</a></li>
+        <li><a href="shop.html#customizable" data-color="#ff4fd8" data-tag="With your name">Name Letters</a></li>
+        <li><a href="shop.html#customizable" data-color="#ffbf00" data-tag="With your name">Desk Organizer</a></li>
+      </ul>
+    </div>
+    <div class="toy-peek" aria-hidden="true"><div class="toy-peek-card"><span class="toy-peek-tag"></span><span class="toy-peek-photo">Photo coming soon</span></div></div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Why 3D printed?</h2>
+      <p class="lead">Printing at home means small batches, fun colours and designs you won't find in a big shop.</p>
+      <div class="features">
+        <div class="feature"><div class="dot" style="background:var(--sun)"></div><h3>Made to move</h3><p>Joints, hinges and gears are printed in place, so they flex and spin right out of the box.</p></div>
+        <div class="feature"><div class="dot" style="background:var(--mint)"></div><h3>Small batches</h3><p>Each toy is printed to order, so nothing sits on a shelf for months.</p></div>
+        <div class="feature"><div class="dot" style="background:var(--pop)"></div><h3>Family friendly</h3><p>Quiet enough for the classroom, fun enough for a long car ride.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap band">
+      <div class="ph">Photo of the 3D printer at work goes here</div>
+      <div>
+        <h2>Fresh off the printer</h2>
+        <p class="lead">Our first collection is all about fidget toys: dragons, cubes, spinners and more on the way.</p>
+        <a class="btn" href="shop.html">See the collection</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">Vortex Toys · Fidget toys 3D printed by hand, layer by layer.</div>
+</footer>
+
+<div class="drawer-bg" id="drawer-bg"></div>
+<aside class="drawer" id="drawer" aria-label="Your cart">
+  <header><h2>Your cart</h2><button class="close" id="cart-close" type="button" aria-label="Close cart">&times;</button></header>
+  <div class="lines" id="cart-lines"><p class="status">Your cart is empty.</p></div>
+  <footer>
+    <div class="totals"><span>Subtotal</span><span id="cart-subtotal">–</span></div>
+    <p class="note">Shipping is worked out at checkout.</p>
+    <p class="error" id="cart-error" hidden></p>
+    <button class="btn" id="checkout" type="button" disabled>Checkout</button>
+  </footer>
+</aside>
+<script src="kinetic.js?v=7"></script>
+<script type="module" src="app.js?v=3"></script>
+</body>
+</html>

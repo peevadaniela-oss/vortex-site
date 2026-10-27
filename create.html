@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create your own · Vortex Toys</title>
+<meta name="description" content="Create, customise, design and buy your own 3D print. See the prices, or describe your idea and get a starting design.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css?v=6">
+<link rel="stylesheet" href="create.css?v=2">
+<link rel="stylesheet" href="ai.css?v=1">
+<link rel="stylesheet" href="backgrounds-about.css?v=6">
+</head>
+<body class="sun bg-synthwave">
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="logo-swirl" aria-hidden="true"></span>Vortex Toys</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="create.html" aria-current="page">Create your own</a>
+      <a href="design.html">Design your own</a>
+      <a href="about.html">About me</a>
+      <button class="cart-btn" id="cart-open" type="button">Cart (<span id="cart-count">0</span>)</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="wrap create-hero">
+      <h1>Your idea, printed for real</h1>
+      <p class="lead">Dream up a toy, make it yours, see it in 3D, and we print it for you, one layer at a time.</p>
+      <div class="cta-row">
+        <a class="btn" href="design.html">Start designing</a>
+        <a class="btn secondary" href="#ai-maker">Invent something with AI</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2 class="section-title">How it works</h2>
+      <ol class="how">
+        <li class="how-step"><span class="num">1</span><h3>Create</h3><p>Start from a shape: a keychain tag, a star, a heart, a fidget spinner or a name plate.</p></li>
+        <li class="how-step"><span class="num">2</span><h3>Customise</h3><p>Pick the size, choose from ten colours (one glows in the dark!), and add a name or a short word.</p></li>
+        <li class="how-step"><span class="num">3</span><h3>Design</h3><p>Watch your print come to life in 3D. Spin it around and change anything until it looks just right.</p></li>
+        <li class="how-step"><span class="num">4</span><h3>Buy</h3><p>See the price straight away and add it to your cart. We print it to order and check it by hand.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="ai-maker">
+    <div class="wrap">
+      <h2 class="section-title">Invent something new with AI</h2>
+      <p class="lead">Describe anything you can imagine, and our AI makes a brand-new 3D model of it, just for you. Spin it around, pick a size and colour, and we print it.</p>
+      <div class="card ai-maker">
+        <div class="ai-ask">
+          <label class="custom-field" for="ai-idea">What should the AI make?</label>
+          <textarea id="ai-idea" rows="4" maxlength="300" placeholder="e.g. A dragon riding a skateboard"></textarea>
+          <div class="examples">
+            <span class="sub">Try:</span>
+            <button type="button" class="chip ai-chip">A dragon riding a skateboard</button>
+            <button type="button" class="chip ai-chip">A smiling cactus wearing sunglasses</button>
+            <button type="button" class="chip ai-chip">A cute robot holding a heart</button>
+          </div>
+          <button class="btn" type="button" id="ai-go">Make my model</button>
+          <div class="ai-progress" id="ai-progress" hidden><span id="ai-progress-bar"></span></div>
+          <p class="ai-msg" id="ai-msg" aria-live="polite"></p>
+          <p class="note">Each visitor can make 3 AI models a day. We check every AI model before printing and get in touch if it needs changes.</p>
+        </div>
+        <div class="ai-result">
+          <div class="ai-stage">
+            <canvas id="ai-preview" aria-label="3D preview of your AI model"></canvas>
+            <p class="ai-stage-msg" id="ai-stage-msg">Your model will appear here.</p>
+          </div>
+          <div class="ai-buy" id="ai-buy" hidden>
+            <div class="choices sizes" id="ai-sizes"></div>
+            <span class="sub">Colour <span id="ai-colour-name"></span></span>
+            <div class="swatches small" id="ai-swatches"></div>
+            <!-- app.js reads these and the button below when adding to the cart -->
+            <input type="hidden" id="ai-f-idea" data-key="Your idea" data-required="true">
+            <input type="hidden" id="ai-f-colour" data-key="Colour" data-required="true">
+            <input type="hidden" id="ai-f-model" data-key="Model ID" data-required="true">
+            <div class="ai-price-row">
+              <div class="big-price" id="ai-price">–</div>
+              <button class="btn" type="button" id="ai-add" data-add="" data-variant="">Add to cart</button>
+            </div>
+            <p class="error card-error" hidden></p>
+          </div>
+          <button type="button" class="link-btn" id="ai-reset" hidden>Start over with a new idea</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="idea">
+    <div class="wrap">
+      <h2 class="section-title">Design assistant</h2>
+      <p class="lead">Describe your idea in your own words. The assistant turns it into a project you can open in the designer and keep changing whenever you like.</p>
+      <div class="idea">
+        <div class="idea-box">
+          <label class="custom-field" for="idea-text">Your idea</label>
+          <textarea id="idea-text" rows="4" maxlength="300" placeholder="e.g. A pink heart that says Mia"></textarea>
+          <div class="examples">
+            <span class="sub">Try:</span>
+            <button type="button" class="chip">A glow in the dark star for my brother Leo</button>
+            <button type="button" class="chip">A big blue fidget spinner</button>
+            <button type="button" class="chip">A purple name plate for my door that says MAYA</button>
+          </div>
+          <button class="btn" type="button" id="idea-go">Make it a project</button>
+        </div>
+        <div class="idea-result" id="idea-result" aria-live="polite">
+          <p class="idea-empty">Your new project will show up here.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="my-projects" hidden>
+    <div class="wrap">
+      <h2 class="section-title">My projects</h2>
+      <p class="lead">Your saved designs. Open one to keep editing it, then add it to your cart when it's ready. Projects are kept in this browser.</p>
+      <div class="projects" id="projects"></div>
+    </div>
+  </section>
+
+  <section id="prices">
+    <div class="wrap">
+      <h2 class="section-title">Prices</h2>
+      <p class="lead">One price for each shape and size. Your colours and words are included at no extra cost.</p>
+      <div class="price-table-wrap">
+        <table class="price-table" id="price-table"></table>
+      </div>
+      <div class="price-parts">
+        <h3>What goes into the price</h3>
+        <ul>
+          <li><b>Plastic</b> for your print, including the odd print that has to be redone</li>
+          <li><b>Printer time</b>: bigger prints take longer, from about 25 minutes to 4½ hours</li>
+          <li><b>Packing</b> so it arrives safely</li>
+          <li><b>Hand checking</b> of every print before it ships</li>
+        </ul>
+        <p class="note">Shipping is worked out at checkout.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap band create-band">
+      <div>
+        <h2>Ready to make yours?</h2>
+        <p class="lead">It takes about a minute, and you'll see exactly what you're getting before you buy.</p>
+      </div>
+      <a class="btn" href="design.html">Open the designer</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">Vortex Toys · Fidget toys 3D printed by hand, layer by layer.</div>
+</footer>
+
+<div class="drawer-bg" id="drawer-bg"></div>
+<aside class="drawer" id="drawer" aria-label="Your cart">
+  <header><h2>Your cart</h2><button class="close" id="cart-close" type="button" aria-label="Close cart">&times;</button></header>
+  <div class="lines" id="cart-lines"><p class="status">Your cart is empty.</p></div>
+  <footer>
+    <div class="totals"><span>Subtotal</span><span id="cart-subtotal">–</span></div>
+    <p class="note">Shipping is worked out at checkout.</p>
+    <p class="error" id="cart-error" hidden></p>
+    <button class="btn" id="checkout" type="button" disabled>Checkout</button>
+  </footer>
+</aside>
+<script src="synthwave.js?v=1" defer></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="create.js?v=3"></script>
+<script type="module" src="ai.js?v=1"></script>
+<script type="module" src="app.js?v=3"></script>
+</body>
+</html>

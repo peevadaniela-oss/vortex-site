@@ -1,0 +1,7 @@
+
+/* customizable items */
+body.sun .section-title { font-size: 2.2rem; color: #fff; text-shadow: 3px 3px 0 #2a1650, -1px -1px 0 #2a1650, 1px -1px 0 #2a1650, -1px 1px 0 #2a1650, 0 0 20px rgba(255, 191, 0, .8); }
+.custom-field { display: grid; gap: 4px; font-weight: 700; font-size: .95rem; }
+.custom-field input { font: inherit; padding: 10px 12px; border-radius: 12px; border: 2px solid var(--brand); background: #0f0a1c; color: #fff; }
+.custom-field input:focus { outline: none; border-color: var(--neon); box-shadow: 0 0 12px rgba(57, 255, 20, .5); }
+.card:has(input:focus) { animation: none; }
