@@ -317,7 +317,7 @@ function productCard(p) {
       <div class="price">${price}${p.compareAtPrice ? `<s>${esc(p.compareAtPrice)}</s>` : ""}</div>
       ${p.textModifiers.map((m) => `
         <label class="custom-field">${esc(m.title)}${m.mandatory ? "" : " (optional)"}
-          <input type="text" data-key="${esc(m.key)}" data-required="${m.mandatory}" ${m.maxChars ? `maxlength="${m.maxChars}"` : ""} placeholder="e.g. Nicole">
+          <input type="text" data-key="${esc(m.key)}" data-required="${m.mandatory}" ${m.maxChars ? `maxlength="${m.maxChars}"` : ""} placeholder="${/colou?r/i.test(m.title) ? "e.g. Purple" : "e.g. Nicole"}">
         </label>`).join("")}
       <p class="error card-error" hidden></p>
       ${canAdd
