@@ -25,12 +25,12 @@ export const SHAPES = [
   { key: "heart", name: "Heart", grams: 18, hours: 1.2, icon: "M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.7-8 11-8 11z" },
   { key: "spinner", name: "Fidget spinner", grams: 30, hours: 2, icon: "M12 2a4 4 0 0 1 2 7.5V10a3 3 0 0 1 1 1.3 4 4 0 1 1-1.6 3.6 3 3 0 0 1-2.8 0A4 4 0 1 1 9 11.3a3 3 0 0 1 1-1.3v-.5A4 4 0 0 1 12 2z" },
   { key: "plate", name: "Name plate", grams: 35, hours: 2.5, icon: "M3 8h18a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1zm3 3v2h12v-2z" },
-  { key: "egg", name: "Dragon egg", grams: 40, hours: 4, photo: "images/articulated-dragon-egg.jpg", icon: "M12 2c3.9 0 7 6.2 7 11.2A7 7 0 0 1 5 13.2C5 8.2 8.1 2 12 2zM8 20h8v2H8z" },
+  { key: "egg", name: "Dragon egg", grams: 40, hours: 4, photo: "https://static.wixstatic.com/media/67b3a8_437f5fb57869465f8270393cfb940de0~mv2.jpg", icon: "M12 2c3.9 0 7 6.2 7 11.2A7 7 0 0 1 5 13.2C5 8.2 8.1 2 12 2zM8 20h8v2H8z" },
   { key: "spike", name: "Spike dragon", grams: 45, hours: 5, photo: "https://static.wixstatic.com/media/67b3a8_29173b54f7004792997352465bdaf42c~mv2.jpg/v1/fill/w_400,h_400,al_c,q_85/spike-dragon.jpg",
     credit: { by: "CLUCKWORKS 3D", profile: "https://makerworld.com/en/@CHICKEMM", model: "https://makerworld.com/en/models/1670898-articulated-spike-dragon-free-to-sell-read-desc", licence: "CC BY-SA 4.0" },
     icon: "M1 15l3-5 2 3 2-5 2 5 2-5 2 5 2-5 2 5 3-3 2 2-3 4H4z" },
-  { key: "letter", name: "Name letter", grams: 60, hours: 4, photo: "images/name-letter-gabriel.jpg", icon: "M10 2h4l7 20h-4.2l-1.5-4.5H8.7L7.2 22H3zm-.1 12h4.2L12 7.6z" },
-  { key: "organizer", name: "Desk organizer", grams: 90, hours: 6, photo: "images/desk-organizer-aurora.jpg", icon: "M2 8h20v13H2zm2 2v9h5v-9zm7 0v9h2v-9zm4 0v9h5v-9z" },
+  { key: "letter", name: "Name letter", grams: 60, hours: 4, photo: "https://static.wixstatic.com/media/67b3a8_6ca34f89df514fa391d50ba0678b32fb~mv2.jpg", icon: "M10 2h4l7 20h-4.2l-1.5-4.5H8.7L7.2 22H3zm-.1 12h4.2L12 7.6z" },
+  { key: "organizer", name: "Desk organizer", grams: 90, hours: 6, photo: "https://static.wixstatic.com/media/67b3a8_bc684720a26c450f8fc7eaa47ddd673c~mv2.jpg", icon: "M2 8h20v13H2zm2 2v9h5v-9zm7 0v9h2v-9zm4 0v9h5v-9z" },
 ];
 export const SIZES = [
   { name: "Small", scale: 0.7, grams: 0.55, hours: 0.6 },

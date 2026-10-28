@@ -68,7 +68,7 @@ section h2 { font-size: 2rem; margin: 0 0 8px; }
 .feature h3 { margin: 0 0 6px; font-size: 1.25rem; }
 .feature p { margin: 0; color: var(--muted); }
 
-/* photo gallery: add a <figure> with an image from images/ */
+/* photo gallery: add a <figure> with a photo from the Wix media manager */
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; margin-bottom: 24px; }
 .gallery figure { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; }
 .gallery img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; }
@@ -170,12 +170,6 @@ body.home section h2::after { content: ""; display: block; width: 70px; height: 
 .feature { background: rgba(26, 18, 48, .85); border: 2px solid var(--line); }
 .feature:hover { border-color: var(--neon); box-shadow: 0 0 20px rgba(57, 255, 20, .35); }
 .feature p { color: var(--muted); }
-/* photo gallery: add a <figure> with an image from images/ */
-.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; margin-bottom: 24px; }
-.gallery figure { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; }
-.gallery img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; }
-.gallery figcaption { font-weight: 800; padding: 8px 4px 2px; }
-
 .band { background: rgba(155, 92, 255, .18); border: 2px solid var(--brand); }
 
 /* yellow pages: white headings with an outline, dark panels behind body text */
