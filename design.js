@@ -5,7 +5,7 @@
 import { PRODUCT_ID, VARIANTS, SHAPES, SIZES, COLOURS } from "./catalog.js";
 import { getProject, createProject, updateProject } from "./projects.js";
 
-let THREE, OrbitControls, FontLoader, TextGeometry;
+let THREE, OrbitControls, FontLoader, TextGeometry, mergeGeometries;
 
 const state = { shape: "star", size: "Medium", main: COLOURS[0], textColour: COLOURS[7], text: "" };
 
@@ -90,9 +90,19 @@ function renderControls() {
   $("text-name").textContent = state.textColour.name;
   $("text-colour").hidden = !text;
 
-  const base = MODELS[state.shape];
+  const base = MODELS[state.shape], tall = base.tall ?? base.h;
   for (const s of SIZES) $(`size-mm-${s.name}`).textContent = `${Math.round(base.w * s.scale)} mm`;
-  $("dims").textContent = `About ${Math.round(base.w * size.scale)} × ${Math.round(base.h * size.scale)} mm`;
+  $("dims").textContent = `About ${Math.round(base.w * size.scale)} × ${Math.round(tall * size.scale)} mm`;
+  $("real-photo").hidden = !shape.photo;
+  if (shape.photo) {
+    $("real-photo").querySelector("img").src = shape.photo;
+    $("real-photo").querySelector("img").alt = shape.credit ? `${shape.name} by ${shape.credit.by}` : `A real ${shape.name.toLowerCase()} we printed`;
+    $("real-photo").querySelector("figcaption").textContent = shape.credit ? `Design by ${shape.credit.by}` : "A real one we printed";
+  }
+  const c = shape.credit;
+  $("shape-credit").hidden = !c;
+  $("shape-credit").innerHTML = c ? `The ${esc(shape.name.toLowerCase())} is <a href="${esc(c.model)}" target="_blank" rel="noopener">designed by ${esc(c.by)}</a>
+    (<a href="${esc(c.profile)}" target="_blank" rel="noopener">profile</a>), shared under ${esc(c.licence)}, and the designer gives us the right to sell prints of it.` : "";
   $("facts").textContent = `${Math.round(shape.grams * size.grams)} g of plastic · prints in ${printTime(shape.hours * size.hours)}`;
 
   const [variantId, price] = VARIANTS[state.shape][state.size];
@@ -159,7 +169,67 @@ function spinner() {
   return s;
 }
 
-// w/h: footprint in mm; depth: thickness; text: the box the words are fitted into
+function eggOnStand() {
+  // a faceted egg (low segment count reads as dragon scales) sitting on a flat-fronted stand
+  const pts = [];
+  for (let i = 0; i <= 12; i++) {
+    const t = i / 12, u = 2 * t - 1;
+    pts.push(new THREE.Vector2(Math.max(0.01, 21 * Math.sqrt(1 - u * u) * (1 - 0.18 * u)), 6 + t * 60));
+  }
+  const egg = new THREE.LatheGeometry(pts, 10).toNonIndexed();
+  egg.rotateX(Math.PI / 2); // lathe stands on y; the model stands on z
+  const stand = new THREE.ExtrudeGeometry(roundedRect(48, 30, 8), { depth: 8, bevelEnabled: false });
+  egg.deleteAttribute("uv");
+  stand.deleteAttribute("uv");
+  return mergeGeometries([stand, egg]);
+}
+function organizer() {
+  // open-top box with three compartments, plus a floor
+  const rect = (x0, y0, x1, y1) => new THREE.Path([[x0, y0], [x0, y1], [x1, y1], [x1, y0]].map(([x, y]) => new THREE.Vector2(x, y)));
+  const walls = roundedRect(110, 45, 10);
+  walls.holes.push(rect(-51, -18.5, -19, 18.5), rect(-15, -18.5, 15, 18.5), rect(19, -18.5, 51, 18.5));
+  const g = new THREE.ExtrudeGeometry(walls, { depth: 40, bevelEnabled: false, curveSegments: 16 });
+  const floor = new THREE.ExtrudeGeometry(roundedRect(110, 45, 10), { depth: 3, bevelEnabled: false, curveSegments: 16 });
+  return mergeGeometries([g, floor]);
+}
+function spikeDragon() {
+  // a chunky serpent: segments along an S-curve with a spike on each, a head, a tail, and a name tag
+  const parts = [];
+  const add = (g, x, y, z) => { g.translate(x, y, z); parts.push(g.index ? g.toNonIndexed() : g); };
+  const n = 13;
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1), x = -40 + 85 * t, y = 12 * Math.sin(t * Math.PI * 2) + 10, r = 8 * (1 - 0.55 * t) + 2;
+    const seg = new THREE.SphereGeometry(r, 7, 5);
+    seg.scale(1, 1, 0.8);
+    add(seg, x, y, r * 0.8);
+    const spike = new THREE.ConeGeometry(r * 0.45, r * 1.2, 4);
+    spike.rotateX(Math.PI / 2);
+    add(spike, x, y, r * 1.6 + r * 0.5);
+  }
+  const head = new THREE.ConeGeometry(8, 18, 6);
+  head.rotateZ(Math.PI / 2); // point the snout along -x
+  add(head, -52, 10, 8);
+  for (const side of [-1, 1]) {
+    const horn = new THREE.ConeGeometry(2, 10, 4);
+    horn.rotateZ(-Math.PI / 3);
+    add(horn, -40, 10 + side * 5, 17);
+  }
+  const tail = new THREE.ConeGeometry(2.5, 12, 4);
+  tail.rotateZ(-Math.PI / 2);
+  add(tail, 51, 10, 2.5);
+  add(new THREE.ExtrudeGeometry(roundedRect(70, 16, 5), { depth: 2, bevelEnabled: false }), 0, -27, 0);
+  for (const g of parts) g.deleteAttribute("uv");
+  return mergeGeometries(parts);
+}
+function letterShapes() {
+  // the first letter of their words, in the same font as the words; a plain block until the font loads
+  const ch = [...state.text.trim().toUpperCase()].find((c) => font?.data.glyphs[c]) ?? "A";
+  if (!font) return roundedRect(60, 70, 6);
+  return font.generateShapes(ch, 72);
+}
+
+// w/h: footprint in mm; depth: thickness; tall: height when it stands up; text: the box the words
+// are fitted into (front: on the front face, centred at height z, instead of on top)
 const MODELS = {
   tag: { w: 52, h: 22, depth: 4, text: { x: 4, y: 0, w: 34, h: 12 },
     make() { const s = roundedRect(52, 22, 8); s.holes.push(hole(-19, 0, 3.5)); return s; } },
@@ -167,6 +237,10 @@ const MODELS = {
   heart: { w: 61, h: 52, depth: 5, text: { x: 0, y: 4, w: 32, h: 11 }, make: heart },
   spinner: { w: 60, h: 56, depth: 7, text: { x: 0, y: 0, w: 19, h: 7 }, make: spinner },
   plate: { w: 92, h: 28, depth: 5, text: { x: 0, y: 0, w: 82, h: 17 }, make: () => roundedRect(92, 28, 6) },
+  egg: { w: 48, h: 30, tall: 66, text: { front: true, x: 0, z: 4, w: 40, h: 5.5 }, geometry: eggOnStand, faceted: true },
+  letter: { w: 66, h: 72, depth: 10, centre: true, text: { x: 0, y: -6, w: 70, h: 16 }, make: letterShapes },
+  spike: { w: 110, h: 70, tall: 26, depth: 0.8, text: { x: 0, y: -27, w: 62, h: 10 }, geometry: spikeDragon, faceted: true },
+  organizer: { w: 110, h: 45, tall: 40, text: { front: true, x: 0, z: 20, w: 92, h: 18 }, geometry: organizer },
 };
 const BEVEL = 0.8;
 
@@ -232,16 +306,23 @@ function setMaterial(mat, colour) {
 function buildBody() {
   const m = MODELS[state.shape];
   three.body.geometry?.dispose();
-  three.body.geometry = new THREE.ExtrudeGeometry(m.make(), {
+  three.body.geometry = m.geometry ? m.geometry() : new THREE.ExtrudeGeometry(m.make(), {
     depth: m.depth, curveSegments: 24, bevelEnabled: true, bevelThickness: BEVEL, bevelSize: BEVEL, bevelSegments: 3,
   });
+  if (m.centre) {
+    three.body.geometry.computeBoundingBox();
+    const b = three.body.geometry.boundingBox;
+    three.body.geometry.translate(-(b.min.x + b.max.x) / 2, -(b.min.y + b.max.y) / 2, 0);
+  }
+  three.body.material.flatShading = !!m.faceted;
+  three.body.material.needsUpdate = true;
   // sit on the bed: the bevel reaches BEVEL below z = 0
-  three.body.position.z = BEVEL;
+  three.body.position.z = m.geometry ? 0 : BEVEL;
   // frame the Large version, so changing the size visibly changes the model
-  const r = Math.hypot(m.w, m.h) * 0.5 * SIZES[2].scale;
+  const r = Math.hypot(m.w, m.h, m.tall ?? 0) * 0.5 * SIZES[2].scale;
   const dist = (r / Math.sin(THREE.MathUtils.degToRad(three.camera.fov / 2))) * 1.05;
   three.camera.position.set(0, dist * 0.72, dist * 0.7);
-  three.controls.target.set(0, 0, 0);
+  three.controls.target.set(0, ((m.tall ?? 0) / 2) * SIZES[1].scale, 0);
   three.controls.minDistance = dist * 0.5;
   three.controls.maxDistance = dist * 1.6;
 }
@@ -264,13 +345,21 @@ function buildText() {
   const k = Math.min(m.text.w / bw, m.text.h / bh);
   three.words.geometry = g;
   three.words.scale.set(k, k, 1);
-  three.words.position.set(m.text.x, m.text.y, BEVEL * 2 + m.depth - 0.3);
+  if (m.text.front) {
+    // stand the words up against the front face (model -y faces the camera)
+    three.words.rotation.x = Math.PI / 2;
+    three.words.position.set(m.text.x, -m.h / 2 + 0.3, m.text.z);
+  } else {
+    three.words.rotation.x = 0;
+    three.words.position.set(m.text.x, m.text.y, BEVEL * 2 + m.depth - 0.3);
+  }
   three.words.visible = true;
 }
 
 function renderModel(what) {
   if (!three) return;
-  if (what === "model" || what === "all") buildBody();
+  // the name letter's shape is the first letter of the words
+  if (what === "model" || what === "all" || (what === "text" && state.shape === "letter")) buildBody();
   if (what === "model" || what === "text" || what === "all") buildText();
   three.model.scale.setScalar(sizeOf().scale);
   setMaterial(three.body.material, state.main);
@@ -286,13 +375,14 @@ function update(what) {
 update("all");
 renderProject();
 try {
-  const [t, oc, fl, tg] = await Promise.all([
+  const [t, oc, fl, tg, bgu] = await Promise.all([
     import("three"),
     import("three/addons/controls/OrbitControls.js"),
     import("three/addons/loaders/FontLoader.js"),
     import("three/addons/geometries/TextGeometry.js"),
+    import("three/addons/utils/BufferGeometryUtils.js"),
   ]);
-  [THREE, { OrbitControls }, { FontLoader }, { TextGeometry }] = [t, oc, fl, tg];
+  [THREE, { OrbitControls }, { FontLoader }, { TextGeometry }, { mergeGeometries }] = [t, oc, fl, tg, bgu];
   initThree();
 } catch {
   three = null;
@@ -300,7 +390,7 @@ try {
 if (three) {
   $("stage-msg").hidden = true;
   renderModel("all");
-  new FontLoader().load("https://cdn.jsdelivr.net/npm/three@0.170.0/examples/fonts/helvetiker_bold.typeface.json", (f) => { font = f; renderModel("text"); });
+  new FontLoader().load("https://cdn.jsdelivr.net/npm/three@0.170.0/examples/fonts/helvetiker_bold.typeface.json", (f) => { font = f; renderModel(state.shape === "letter" ? "model" : "text"); });
 } else {
   $("stage-msg").textContent = "The 3D preview can't run on this device, but you can still design your print and order it.";
 }

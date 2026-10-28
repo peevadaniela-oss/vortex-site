@@ -7,8 +7,8 @@
 <meta name="description" content="Create, customise, design and buy your own 3D print. See the prices, or describe your idea and get a starting design.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap">
-<link rel="stylesheet" href="styles.css?v=6">
-<link rel="stylesheet" href="create.css?v=2">
+<link rel="stylesheet" href="styles.css?v=10">
+<link rel="stylesheet" href="create.css?v=4">
 <link rel="stylesheet" href="ai.css?v=1">
 <link rel="stylesheet" href="backgrounds-about.css?v=6">
 </head>
@@ -43,11 +43,20 @@
     <div class="wrap">
       <h2 class="section-title">How it works</h2>
       <ol class="how">
-        <li class="how-step"><span class="num">1</span><h3>Create</h3><p>Start from a shape: a keychain tag, a star, a heart, a fidget spinner or a name plate.</p></li>
+        <li class="how-step"><span class="num">1</span><h3>Create</h3><p>Start from a shape: a keychain tag, a star, a heart, a fidget spinner, a name plate, a dragon egg, a spike dragon, a name letter or a desk organizer.</p></li>
         <li class="how-step"><span class="num">2</span><h3>Customise</h3><p>Pick the size, choose from ten colours (one glows in the dark!), and add a name or a short word.</p></li>
         <li class="how-step"><span class="num">3</span><h3>Design</h3><p>Watch your print come to life in 3D. Spin it around and change anything until it looks just right.</p></li>
         <li class="how-step"><span class="num">4</span><h3>Buy</h3><p>See the price straight away and add it to your cart. We print it to order and check it by hand.</p></li>
       </ol>
+    </div>
+  </section>
+
+  <section id="starters">
+    <div class="wrap">
+      <h2 class="section-title">Dragons, letters and organizers</h2>
+      <p class="lead">Pick one, then choose its size and colours and add a name in the designer.</p>
+      <div class="starter-grid" id="starter-grid"></div>
+      <p class="note starter-credits" id="starter-credits"></p>
     </div>
   </section>
 
@@ -107,6 +116,8 @@
             <span class="sub">Try:</span>
             <button type="button" class="chip">A glow in the dark star for my brother Leo</button>
             <button type="button" class="chip">A big blue fidget spinner</button>
+            <button type="button" class="chip">A purple dragon egg for Leo</button>
+            <button type="button" class="chip">A pink desk organizer that says AURORA</button>
             <button type="button" class="chip">A purple name plate for my door that says MAYA</button>
           </div>
           <button class="btn" type="button" id="idea-go">Make it a project</button>
@@ -179,8 +190,8 @@
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
 } }
 </script>
-<script type="module" src="create.js?v=3"></script>
+<script type="module" src="create.js?v=5"></script>
 <script type="module" src="ai.js?v=1"></script>
-<script type="module" src="app.js?v=4"></script>
+<script type="module" src="app.js?v=5"></script>
 </body>
 </html>
