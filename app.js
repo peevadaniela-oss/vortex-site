@@ -365,7 +365,8 @@ function optionCard(p, image, price) {
       <h3>${esc(p.name)}</h3>
       <div class="price">${esc(v?.price || price)}</div>
       ${p.optionList.map((o) => `
-        <div class="option-pick" role="group" aria-label="${esc(o.name)}">
+        <button type="button" class="link-btn option-open" data-reveal aria-expanded="false">See all ${o.choices.length} ${esc(o.name.toLowerCase())}s</button>
+        <div class="option-pick" role="group" aria-label="${esc(o.name)}" hidden>
           <span class="sub">Choose your ${esc(o.name.toLowerCase())}</span>
           <div class="option-chips">${o.choices.map((c, i) => `
             <button type="button" class="option-chip" data-option="${esc(o.name)}" data-choice="${esc(c.name)}" data-image="${esc(c.image)}" aria-pressed="${i === 0}">
@@ -430,6 +431,8 @@ document.addEventListener("click", async (ev) => {
   if (t.id === "cart-open") { openCart(true); return; }
   if (t.id === "cart-close") { openCart(false); return; }
   if (t.dataset.choice) { pickChoice(t); return; }
+  // the choices (e.g. every dragon) stay tucked away until someone asks to see them
+  if (t.hasAttribute("data-reveal")) { t.hidden = true; t.setAttribute("aria-expanded", "true"); t.nextElementSibling.hidden = false; return; }
   if (t.dataset.add) {
     const card = t.closest(".card");
     const cardError = card?.querySelector(".card-error");
