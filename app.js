@@ -166,6 +166,7 @@ function toSummary(raw) {
     preorder: isPreorderProduct(raw),
     imageUrl: imgSrc(media[0], 800, 800),
     quickAddable: options.length === 0 && availability === "IN_STOCK" && !hasSubscriptions,
+    hasOptions: options.length > 0 && !hasSubscriptions,
     textModifiers: toModifiers(raw).filter((m) => m.type === "text"),
   };
 }
@@ -303,11 +304,38 @@ async function cartAction(op) {
   try { renderCart(await op()); } catch (e) { showCartError(e.message); }
 }
 
+// Products with options (e.g. which dragon): read their variants so the card can offer a picker.
+async function withChoices(p) {
+  if (!p.hasOptions) return p;
+  try {
+    const res = await wixRequest(`/stores/v3/products/${p.id}`, { method: "GET", query: { fields: ["VARIANT_OPTION_CHOICE_NAMES"] } });
+    const raw = res?.product;
+    const optionList = (raw?.options ?? []).map((o) => ({
+      name: o.name,
+      choices: (o.choicesSettings?.choices ?? []).filter((c) => c.visible !== false).map((c) => ({
+        name: c.name,
+        image: c.linkedMedia?.[0] ? imgSrc(c.linkedMedia[0], 800, 800) : "",
+      })),
+    }));
+    const variants = (raw?.variantsInfo?.variants ?? []).filter((v) => v.visible !== false).map((v) => ({
+      id: rid(v),
+      names: Object.fromEntries((v.choices ?? []).map((c) => [c.optionChoiceNames?.optionName, c.optionChoiceNames?.choiceName])),
+      price: v.price?.actualPrice?.formattedAmount ?? "",
+      inStock: v.inventoryStatus?.inStock !== false,
+    }));
+    return variants.length ? { ...p, optionList, variants } : p;
+  } catch {
+    return p;
+  }
+}
+const pickedVariant = (p, picked) => p.variants.find((v) => p.optionList.every((o) => v.names[o.name] === picked[o.name]));
+
 function productCard(p) {
   const image = p.imageUrl
     ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" loading="lazy">`
     : `<div class="ph">Photo coming soon</div>`;
   const price = p.fromPrice ? `From ${esc(p.price)}` : p.isRange ? `${esc(p.price)} – ${esc(p.maxPrice)}` : esc(p.price);
+  if (p.optionList) return optionCard(p, image, price);
   const canAdd = p.quickAddable || p.preorder;
   return `
     <article class="card">
@@ -317,13 +345,57 @@ function productCard(p) {
       <div class="price">${price}${p.compareAtPrice ? `<s>${esc(p.compareAtPrice)}</s>` : ""}</div>
       ${p.textModifiers.map((m) => `
         <label class="custom-field">${esc(m.title)}${m.mandatory ? "" : " (optional)"}
-          <input type="text" data-key="${esc(m.key)}" data-required="${m.mandatory}" ${m.maxChars ? `maxlength="${m.maxChars}"` : ""} placeholder="e.g. Nicole">
+          <input type="text" data-key="${esc(m.key)}" data-required="${m.mandatory}" ${m.maxChars ? `maxlength="${m.maxChars}"` : ""} placeholder="${/colou?r/i.test(m.title) ? "e.g. Purple" : "e.g. Nicole"}">
         </label>`).join("")}
       <p class="error card-error" hidden></p>
       ${canAdd
         ? `<button class="btn" type="button" data-add="${esc(p.id)}" data-variant="${esc(p.minPriceVariantId ?? "")}">${p.preorder ? "Pre-order" : "Add to cart"}</button>`
         : `<button class="btn" type="button" disabled>${p.availability === "OUT_OF_STOCK" ? "Sold out" : "Unavailable"}</button>`}
     </article>`;
+}
+
+function optionCard(p, image, price) {
+  const picked = Object.fromEntries(p.optionList.map((o) => [o.name, o.choices[0]?.name]));
+  const v = pickedVariant(p, picked);
+  const first = p.optionList[0]?.choices[0];
+  return `
+    <article class="card" data-product="${esc(p.id)}">
+      ${p.ribbon ? `<span class="ribbon">${esc(p.ribbon)}</span>` : ""}
+      ${first?.image ? `<img src="${esc(first.image)}" alt="${esc(`${p.name}: ${first.name}`)}" loading="lazy">` : image}
+      <h3>${esc(p.name)}</h3>
+      <div class="price">${esc(v?.price || price)}</div>
+      ${p.optionList.map((o) => `
+        <button type="button" class="link-btn option-open" data-reveal aria-expanded="false">See all ${o.choices.length} ${esc(o.name.toLowerCase())}s</button>
+        <div class="option-pick" role="group" aria-label="${esc(o.name)}" hidden>
+          <span class="sub">Choose your ${esc(o.name.toLowerCase())}</span>
+          <div class="option-chips">${o.choices.map((c, i) => `
+            <button type="button" class="option-chip" data-option="${esc(o.name)}" data-choice="${esc(c.name)}" data-image="${esc(c.image)}" aria-pressed="${i === 0}">
+              ${c.image ? `<img src="${esc(c.image)}" alt="" loading="lazy">` : ""}<span>${esc(c.name)}</span>
+            </button>`).join("")}
+          </div>
+        </div>`).join("")}
+      ${p.textModifiers.map((m) => `
+        <label class="custom-field">${esc(m.title)}${m.mandatory ? "" : " (optional)"}
+          <input type="text" data-key="${esc(m.key)}" data-required="${m.mandatory}" ${m.maxChars ? `maxlength="${m.maxChars}"` : ""} placeholder="${/colou?r/i.test(m.title) ? "e.g. Purple" : "e.g. Nicole"}">
+        </label>`).join("")}
+      <p class="error card-error" hidden></p>
+      <button class="btn" type="button" data-add="${esc(p.id)}" data-variant="${esc(v?.id ?? "")}" ${v?.inStock === false ? "disabled" : ""}>${v?.inStock === false ? "Sold out" : "Add to cart"}</button>
+    </article>`;
+}
+const shownProducts = new Map();
+function pickChoice(chip) {
+  const card = chip.closest(".card"), p = shownProducts.get(card?.dataset.product);
+  if (!p) return;
+  for (const c of card.querySelectorAll(`[data-option="${CSS.escape(chip.dataset.option)}"]`)) c.setAttribute("aria-pressed", String(c === chip));
+  const picked = Object.fromEntries([...card.querySelectorAll('.option-chip[aria-pressed="true"]')].map((c) => [c.dataset.option, c.dataset.choice]));
+  const v = pickedVariant(p, picked);
+  const img = card.querySelector(":scope > img");
+  if (img && chip.dataset.image) { img.src = chip.dataset.image; img.alt = `${p.name}: ${chip.dataset.choice}`; }
+  if (v?.price) card.querySelector(".price").textContent = v.price;
+  const add = card.querySelector("[data-add]");
+  add.dataset.variant = v?.id ?? "";
+  add.disabled = !v || v.inStock === false;
+  add.textContent = !v || v.inStock === false ? "Sold out" : "Add to cart";
 }
 
 async function loadCategory(slug, gridId, descId) {
@@ -345,7 +417,8 @@ async function loadCategory(slug, gridId, descId) {
         },
       },
     });
-    const products = (res?.products ?? []).map(toSummary);
+    const products = await Promise.all((res?.products ?? []).map(toSummary).map(withChoices));
+    for (const p of products) shownProducts.set(p.id, p);
     grid.innerHTML = products.length ? products.map(productCard).join("") : `<p class="status">New toys are on the printer. Check back soon!</p>`;
   } catch (e) {
     grid.innerHTML = `<p class="status error">We couldn't load the toys right now. Please refresh the page.</p>`;
@@ -357,6 +430,9 @@ document.addEventListener("click", async (ev) => {
   if (!t) return;
   if (t.id === "cart-open") { openCart(true); return; }
   if (t.id === "cart-close") { openCart(false); return; }
+  if (t.dataset.choice) { pickChoice(t); return; }
+  // the choices (e.g. every dragon) stay tucked away until someone asks to see them
+  if (t.hasAttribute("data-reveal")) { t.hidden = true; t.setAttribute("aria-expanded", "true"); t.nextElementSibling.hidden = false; return; }
   if (t.dataset.add) {
     const card = t.closest(".card");
     const cardError = card?.querySelector(".card-error");
@@ -395,4 +471,5 @@ $("drawer-bg").addEventListener("click", () => openCart(false));
 
 loadCategory("fidget-toys", "products", "cat-desc");
 loadCategory("customizable-items", "custom-products", "custom-desc");
+loadCategory("animals", "animal-products", "animal-desc");
 readCart(await getCurrentCartRaw().catch(() => null)).then(renderCart).catch(() => {});
