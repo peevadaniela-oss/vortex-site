@@ -377,3 +377,9 @@ img.photo { display: block; width: 100%; height: 100%; object-fit: cover; border
 .credits summary { cursor: pointer; font-weight: 800; color: var(--pop); }
 .credits a { color: var(--pop); }
 .credits ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 4px; }
+
+/* credits page and footer link */
+.credits-page { max-width: 860px; background: rgba(15, 10, 28, .92); border: 2px solid var(--line); border-radius: var(--radius); padding: 24px 28px; color: #fff; }
+.credits-page h2 { font-size: 1.5rem; margin-top: 28px; }
+.credits-page ul { display: grid; gap: 6px; padding-left: 20px; }
+.credits-page a, .site-footer a { color: var(--pop); }
