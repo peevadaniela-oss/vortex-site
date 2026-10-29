@@ -471,4 +471,5 @@ $("drawer-bg").addEventListener("click", () => openCart(false));
 
 loadCategory("fidget-toys", "products", "cat-desc");
 loadCategory("customizable-items", "custom-products", "custom-desc");
+loadCategory("animals", "animal-products", "animal-desc");
 readCart(await getCurrentCartRaw().catch(() => null)).then(renderCart).catch(() => {});
