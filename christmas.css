@@ -55,3 +55,9 @@ body.bg-snow h1, body.bg-snow .section-title { text-shadow: 3px 3px 0 #120826, -
 @media (prefers-reduced-motion: reduce) {
   body.bg-snow::before, body.bg-snow::after { animation: none; }
 }
+#steps { display: grid; gap: 18px; }
+.products-row .idea-chip { width: 112px; }
+.products-row .idea-chip svg { width: 84px; height: 92px; }
+.products-row .idea-chip span { font-size: .8rem; line-height: 1.15; text-align: center; }
+.products-row .idea-chip small { color: var(--neon); font-weight: 800; }
+.idea-chip[aria-pressed="true"] { border-color: var(--neon); background: rgba(57, 255, 20, .12); box-shadow: 0 0 12px rgba(57, 255, 20, .4); }

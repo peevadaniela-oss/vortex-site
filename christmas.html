@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Dancing+Script:wght@700&family=Nunito:wght@400;600;700;800&display=swap">
 <link rel="stylesheet" href="styles.css?v=8">
 <link rel="stylesheet" href="design.css?v=2">
-<link rel="stylesheet" href="christmas.css?v=1">
+<link rel="stylesheet" href="christmas.css?v=2">
 </head>
 <body class="sun bg-snow">
 <header class="site-header">
@@ -30,62 +30,30 @@
 <main>
   <section>
     <div class="wrap">
-      <h1 class="designer-title">Your own Christmas ornament</h1>
-      <p class="lead">Put a name or a special word on the tree this year. Pick a theme, add the year, choose your colours, and we 3D print it for you, ready to hang.</p>
+      <h1 class="designer-title">Make it a personal Christmas</h1>
+      <p class="lead">Ornaments with a name for every family member (pets too!), and decorations for the table and the shelf. Pick one, make it yours, and we 3D print it for you.</p>
 
-      <div class="ideas" aria-label="Start from an idea">
-        <span class="sub">Start from an idea:</span>
-        <div class="ideas-row" id="ideas"></div>
+      <div class="ideas" aria-label="Pick something to make">
+        <span class="sub">1. Pick something to make:</span>
+        <div class="ideas-row products-row" id="xmas-items"></div>
       </div>
 
       <div class="designer">
-        <div class="stage ornament-stage">
-          <svg id="ornament" viewBox="0 0 200 222" role="img" aria-label="Preview of your ornament"></svg>
+        <div class="stage ornament-stage" id="stage">
+          <svg id="ornament" viewBox="0 0 200 222" role="img" aria-label="Preview"></svg>
           <div class="stage-tags">
-            <span>About 8 cm across</span>
-            <span>Ribbon included</span>
+            <span id="size-tag"></span>
+            <span id="hang-tag"></span>
           </div>
         </div>
 
         <div class="card designer-panel">
-          <fieldset class="step">
-            <legend><b>1</b> Pick a theme <span class="picked" id="theme-name"></span></legend>
-            <div class="choices themes" id="theme-choices"></div>
-          </fieldset>
-
-          <fieldset class="step">
-            <legend><b>2</b> Name or word</legend>
-            <label class="custom-field">Text in script letters
-              <input type="text" id="name-input" maxlength="12" placeholder="e.g. Amor, Paz or Olivia" autocomplete="off">
-            </label>
-            <p class="hint" id="name-hint">Up to 12 letters.</p>
-          </fieldset>
-
-          <fieldset class="step">
-            <legend><b>3</b> The year <span class="picked">(optional)</span></legend>
-            <div class="year-row">
-              <label class="toggle"><input type="checkbox" id="year-on" checked> Add the year</label>
-              <label class="custom-field year-field">Year
-                <input type="text" id="year-input" inputmode="numeric" maxlength="4" autocomplete="off">
-              </label>
-            </div>
-          </fieldset>
-
-          <fieldset class="step">
-            <legend><b>4</b> Colours</legend>
-            <span class="sub">Ring <span class="picked" id="ring-name"></span></span>
-            <div class="swatches small" id="ring-swatches"></div>
-            <span class="sub">Letters and year <span class="picked" id="text-name"></span></span>
-            <div class="swatches small" id="text-swatches"></div>
-            <span class="sub">Background <span class="picked" id="back-name"></span></span>
-            <div class="swatches small" id="back-swatches"></div>
-          </fieldset>
+          <div id="steps"></div>
 
           <!-- app.js reads these and the button below when adding to the cart -->
-          <input type="hidden" id="f-name" data-key="Name" data-required="true">
+          <input type="hidden" id="f-names" data-key="Names" data-required="true">
           <input type="hidden" id="f-year" data-key="Year" data-required="false">
-          <input type="hidden" id="f-theme" data-key="Theme" data-required="true">
-          <input type="hidden" id="f-colours" data-key="Colours" data-required="true">
+          <input type="hidden" id="f-details" data-key="Details" data-required="true">
 
           <div class="price-box">
             <div>
@@ -95,8 +63,8 @@
             <p class="note" id="summary"></p>
           </div>
           <p class="error card-error" hidden></p>
-          <button class="btn" type="button" id="add-ornament" data-add="" data-variant="">Add to cart</button>
-          <p class="note" id="ship-note">Printed to order and checked by hand. Order by December 10 to have it in time for Christmas.</p>
+          <button class="btn" type="button" id="add-xmas" data-add="" data-variant="">Add to cart</button>
+          <p class="note">Printed to order and checked by hand. Order by December 10 to have it in time for Christmas.</p>
         </div>
       </div>
     </div>
@@ -109,7 +77,7 @@
         <div class="how-step"><span class="num">1</span><h3>One for everyone</h3><p>Make one with each name in the family, and add the year so you remember when it went on the tree.</p></div>
         <div class="how-step"><span class="num">2</span><h3>A lovely gift</h3><p>Teachers, grandparents and new babies all love an ornament with their name on it.</p></div>
         <div class="how-step"><span class="num">3</span><h3>Light and strong</h3><p>3D printed in layers of plastic, so it won't shatter if it falls off the tree.</p></div>
-        <div class="how-step"><span class="num">4</span><h3>Ready to hang</h3><p>Each ornament comes with a ribbon through the top loop.</p></div>
+        <div class="how-step"><span class="num">4</span><h3>Ready to hang</h3><p>Every ornament comes with a ribbon through the top loop. Signs and stands are ready for the shelf.</p></div>
       </div>
     </div>
   </section>
@@ -130,7 +98,7 @@
     <button class="btn" id="checkout" type="button" disabled>Checkout</button>
   </footer>
 </aside>
-<script type="module" src="christmas.js?v=1"></script>
+<script type="module" src="christmas.js?v=2"></script>
 <script type="module" src="app.js?v=3"></script>
 </body>
 </html>
