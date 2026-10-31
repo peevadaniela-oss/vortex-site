@@ -339,3 +339,7 @@ body.sun .ph { background: #1a1230; }
 .toy-peek-tag { align-self: flex-start; background: #07060c; color: #fff; border-radius: 999px; padding: 3px 10px; font-size: .8rem; }
 .toy-peek-photo { border: 2px dashed rgba(7, 6, 12, .55); border-radius: 14px; flex: 1; margin-top: 10px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: .85rem; }
 @media (prefers-reduced-motion: reduce) { .toy-list a:hover .ch { animation: none; } }
+
+/* Christmas link in the nav */
+nav a.nav-xmas { color: #ffd23f; }
+nav a.nav-xmas:hover, nav a.nav-xmas[aria-current="page"] { background: #d62828; color: #fff; }
