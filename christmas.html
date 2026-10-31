@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Christmas ornaments · Vortex Toys</title>
+<meta name="description" content="Design your own 3D printed Christmas ornament: a name or a word, the year, a festive theme and your colours.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Dancing+Script:wght@700&family=Nunito:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css?v=8">
+<link rel="stylesheet" href="design.css?v=2">
+<link rel="stylesheet" href="christmas.css?v=2">
+</head>
+<body class="sun bg-snow">
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><span class="logo-swirl" aria-hidden="true"></span>Vortex Toys</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="create.html">Create your own</a>
+      <a href="design.html">Design your own</a>
+      <a href="christmas.html" aria-current="page" class="nav-xmas">Christmas</a>
+      <a href="about.html">About me</a>
+      <button class="cart-btn" id="cart-open" type="button">Cart (<span id="cart-count">0</span>)</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="wrap">
+      <h1 class="designer-title">Make it a personal Christmas</h1>
+      <p class="lead">Ornaments with a name for every family member (pets too!), and decorations for the table and the shelf. Pick one, make it yours, and we 3D print it for you.</p>
+
+      <div class="ideas" aria-label="Pick something to make">
+        <span class="sub">1. Pick something to make:</span>
+        <div class="ideas-row products-row" id="xmas-items"></div>
+      </div>
+
+      <div class="designer">
+        <div class="stage ornament-stage" id="stage">
+          <svg id="ornament" viewBox="0 0 200 222" role="img" aria-label="Preview"></svg>
+          <div class="stage-tags">
+            <span id="size-tag"></span>
+            <span id="hang-tag"></span>
+          </div>
+        </div>
+
+        <div class="card designer-panel">
+          <div id="steps"></div>
+
+          <!-- app.js reads these and the button below when adding to the cart -->
+          <input type="hidden" id="f-names" data-key="Names" data-required="true">
+          <input type="hidden" id="f-year" data-key="Year" data-required="false">
+          <input type="hidden" id="f-details" data-key="Details" data-required="true">
+
+          <div class="price-box">
+            <div>
+              <span class="sub">Your price</span>
+              <div class="big-price" id="price">–</div>
+            </div>
+            <p class="note" id="summary"></p>
+          </div>
+          <p class="error card-error" hidden></p>
+          <button class="btn" type="button" id="add-xmas" data-add="" data-variant="">Add to cart</button>
+          <p class="note">Printed to order and checked by hand. Order by December 10 to have it in time for Christmas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2 class="section-title">Made for the whole family</h2>
+      <div class="how xmas-how">
+        <div class="how-step"><span class="num">1</span><h3>One for everyone</h3><p>Make one with each name in the family, and add the year so you remember when it went on the tree.</p></div>
+        <div class="how-step"><span class="num">2</span><h3>A lovely gift</h3><p>Teachers, grandparents and new babies all love an ornament with their name on it.</p></div>
+        <div class="how-step"><span class="num">3</span><h3>Light and strong</h3><p>3D printed in layers of plastic, so it won't shatter if it falls off the tree.</p></div>
+        <div class="how-step"><span class="num">4</span><h3>Ready to hang</h3><p>Every ornament comes with a ribbon through the top loop. Signs and stands are ready for the shelf.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">Vortex Toys · Fidget toys 3D printed by hand, layer by layer.</div>
+</footer>
+
+<div class="drawer-bg" id="drawer-bg"></div>
+<aside class="drawer" id="drawer" aria-label="Your cart">
+  <header><h2>Your cart</h2><button class="close" id="cart-close" type="button" aria-label="Close cart">&times;</button></header>
+  <div class="lines" id="cart-lines"><p class="status">Your cart is empty.</p></div>
+  <footer>
+    <div class="totals"><span>Subtotal</span><span id="cart-subtotal">–</span></div>
+    <p class="note">Shipping is worked out at checkout.</p>
+    <p class="error" id="cart-error" hidden></p>
+    <button class="btn" id="checkout" type="button" disabled>Checkout</button>
+  </footer>
+</aside>
+<script type="module" src="christmas.js?v=2"></script>
+<script type="module" src="app.js?v=3"></script>
+</body>
+</html>
