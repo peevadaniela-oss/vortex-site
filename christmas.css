@@ -61,3 +61,19 @@ body.bg-snow h1, body.bg-snow .section-title { text-shadow: 3px 3px 0 #120826, -
 .products-row .idea-chip span { font-size: .8rem; line-height: 1.15; text-align: center; }
 .products-row .idea-chip small { color: var(--neon); font-weight: 800; }
 .idea-chip[aria-pressed="true"] { border-color: var(--neon); background: rgba(57, 255, 20, .12); box-shadow: 0 0 12px rgba(57, 255, 20, .4); }
+
+/* free printables */
+.printable-name { display: grid; gap: 6px; max-width: 320px; margin: 0 0 20px; font-weight: 800; color: #fff; text-shadow: 0 1px 3px #120826; }
+.printable-name input { font: inherit; padding: 10px 14px; border-radius: 12px; border: 2px solid var(--line); background: rgba(26, 18, 48, .92); color: #fff; }
+.printable-name input:focus { outline: none; border-color: #d62828; }
+.printables { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.printable { display: flex; flex-direction: column; gap: 8px; background: rgba(26, 18, 48, .92); border: 2px solid var(--line); border-radius: var(--radius); padding: 14px; }
+.printable:hover { border-color: #1f9d3a; box-shadow: 0 0 20px rgba(31, 157, 58, .4); }
+.printable-sheet { background: #fff; border-radius: 8px; overflow: hidden; aspect-ratio: 210 / 297; }
+.printable-sheet svg { display: block; width: 100%; height: 100%; }
+.printable h3 { margin: 4px 0 0; font-size: 1.3rem; }
+.printable p { margin: 0; color: var(--muted); }
+.printable-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 6px; }
+.printable-actions .btn { flex: 1; padding: 10px 12px; text-align: center; }
+@media (max-width: 860px) { .printables { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 420px) { .printables { grid-template-columns: 1fr; } }
