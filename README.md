@@ -1,4 +1,4 @@
-# Vortex
+# Meshcraze
 
 A website for buying and selling 3D printed toys.
 
