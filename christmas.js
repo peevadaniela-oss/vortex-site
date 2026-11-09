@@ -300,7 +300,7 @@ const $ = (id) => document.getElementById(id);
 $("xmas-items").innerHTML = PRODUCTS.map((p) => `
   <button type="button" class="idea-chip" data-product="${p.key}" aria-pressed="false">
     <svg viewBox="0 0 200 222" aria-hidden="true">${svg(p, fresh(p))}</svg>
-    <span>${esc(p.name)}</span><small>$${p.price}</small>
+    <span>${esc(p.name)}</span><small>€${p.price}</small>
   </button>`).join("");
 
 function buildSteps() {
@@ -392,7 +392,7 @@ function update() {
   $("ornament").setAttribute("aria-label", `Preview: ${p.name.toLowerCase()}${list.length ? ` with ${list.join(", ")}` : ""}`);
   $("size-tag").textContent = p.size;
   $("hang-tag").textContent = p.hangs ? "Ribbon included" : "Stands on a shelf";
-  $("price").textContent = new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(p.price);
+  $("price").textContent = new Intl.NumberFormat(undefined, { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(p.price);
   const colours = p.slots.map((sl) => `${sl.label}: ${s.c[sl.key].name}`).join(" · ");
   $("summary").textContent = `${theme ? `${theme.name} ` : ""}${p.name.toLowerCase()}${list.length ? ` with ${list.map((n) => `“${n}”`).join(", ")}` : ""}${y ? ` and ${y}` : ""}`;
 
