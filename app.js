@@ -1,4 +1,4 @@
-// Vortex Toys storefront: talks to Wix as a visitor over plain fetch.
+// 3D Printed Designs storefront: talks to Wix as a visitor over plain fetch.
 // Transport follows the Wix headless kit's shared/rest/client.ts; the mappers are copied from
 // storefront catalog-core.ts and cart-core.ts with the types removed.
 const WIX_CLIENT_ID = "f74a8f97-ba38-4e11-abac-62fb8a213de5";
