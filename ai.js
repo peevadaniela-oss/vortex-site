@@ -4,7 +4,7 @@
 import { COLOURS } from "./catalog.js";
 
 // The Worker's address, e.g. "https://vortex-ai.yourname.workers.dev". Empty until it's set up.
-const AI_SERVER = "";
+const AI_SERVER = "https://ai.meshcraze.com";
 
 // the "Custom AI 3D Print" product in Wix; prices must match the Wix variants
 const PRODUCT_ID = "b112e32a-f2c2-4051-a3c4-f3940e8c36d8";
