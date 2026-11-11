@@ -1,4 +1,4 @@
-// Vortex Toys AI model maker: a small Cloudflare Worker between the website and Meshy.
+// 3D Printed Designs AI model maker: a small Cloudflare Worker between the website and Meshy.
 // It keeps the Meshy key secret, screens prompts, and caps how many models are made per day.
 //
 // Settings (Cloudflare dashboard → the Worker → Settings → Variables and Secrets / Bindings):

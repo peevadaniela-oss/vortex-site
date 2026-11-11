@@ -1,4 +1,4 @@
-# Vortex
+# 3D Printed Designs
 
 A website for buying and selling 3D printed toys.
 
