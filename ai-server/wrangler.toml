@@ -1,0 +1,17 @@
+# The AI model maker server (see worker.js). Deploy from this folder with: npx wrangler deploy
+# The Meshy key is set separately as a secret: npx wrangler secret put MESHY_API_KEY
+name = "vortex-ai"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+account_id = "4cdcc4cd94c3f73bc4875101821d2247"
+workers_dev = true
+routes = [{ pattern = "ai.meshcraze.com", custom_domain = true }]
+
+[vars]
+ALLOWED_ORIGIN = "https://meshcraze.com,https://www.meshcraze.com,https://vortex-site-2oi.pages.dev"
+DAILY_LIMIT = "30"
+PER_VISITOR = "3"
+
+[[kv_namespaces]]
+binding = "LIMITS"
+id = "a3b71acae873496ba2c7a87b813bc3cf"

@@ -3,7 +3,7 @@
 //
 // Settings (Cloudflare dashboard → the Worker → Settings → Variables and Secrets / Bindings):
 //   MESHY_API_KEY   secret: the key from meshy.ai/developers/keys
-//   ALLOWED_ORIGIN  text: the website address, e.g. https://headless-otyskcpqdag-peevadaniela-140c.wix-site-host.com
+//   ALLOWED_ORIGIN  text: the website addresses, comma-separated, e.g. https://meshcraze.com,https://www.meshcraze.com
 //   DAILY_LIMIT     text (optional): models per day for the whole site, default 30
 //   PER_VISITOR     text (optional): models per day for one visitor, default 3
 //   LIMITS          KV namespace binding, used to count models per day
@@ -20,9 +20,10 @@ const PRINTABLE = "A single solid toy for 3D printing: chunky rounded shapes, no
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
-    const allowed = (env.ALLOWED_ORIGIN || "").replace(/\/$/, "");
+    const origins = (env.ALLOWED_ORIGIN || "").split(",").map((o) => o.trim().replace(/\/$/, "")).filter(Boolean);
+    const allowed = origins.length > 0;
     const cors = {
-      "Access-Control-Allow-Origin": allowed || "*",
+      "Access-Control-Allow-Origin": !allowed ? "*" : origins.includes(origin) ? origin : origins[0],
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
       "Vary": "Origin",
@@ -40,7 +41,7 @@ export default {
     try {
       if (request.method === "POST" && url.pathname === "/generate") {
         // only the shop's own pages may start (and pay for) a model
-        if (allowed && origin !== allowed) return json({ error: "Not allowed." }, 403);
+        if (allowed && !origins.includes(origin)) return json({ error: "Not allowed." }, 403);
         const { prompt } = await request.json().catch(() => ({}));
         const idea = String(prompt || "").replace(/\s+/g, " ").trim();
         if (idea.length < 3 || idea.length > 300) return json({ error: "Describe your idea in 3 to 300 characters." }, 400);
