@@ -56,6 +56,11 @@ nav a:hover, nav a[aria-current="page"] { background: #f1ecff; color: var(--bran
 .hero h1 span { color: var(--pop); }
 .hero p { font-size: 1.15rem; color: var(--muted); margin: 0 0 24px; }
 .hero .ph { min-height: 320px; }
+.hero-photo { position: relative; display: grid; place-items: center; }
+.hero-photo::before { content: ""; position: absolute; inset: 8% 6%; border-radius: 50%; background: radial-gradient(closest-side, rgba(155, 92, 255, .45), rgba(0, 229, 255, .18) 60%, transparent); filter: blur(24px); z-index: 0; }
+.hero-photo img { position: relative; z-index: 1; width: 100%; max-width: 560px; height: auto; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .55)); animation: hero-float 6s ease-in-out infinite; }
+@keyframes hero-float { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(1deg); } }
+@media (prefers-reduced-motion: reduce) { .hero-photo img { animation: none; } }
 .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
 
 section { padding: 40px 0; }
