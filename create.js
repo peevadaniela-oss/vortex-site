@@ -3,8 +3,10 @@
 import { VARIANTS, SHAPES, SIZES, COLOURS } from "./catalog.js";
 import { listProjects, createProject, updateProject, deleteProject } from "./projects.js";
 
-// When an AI service is set up, put its address here. It gets { idea } and answers with
-// { shape, size, main, textc, text, why: [] }; until then (or if it fails) the built-in helper runs.
+// The design assistant's address: the Claude Worker in ai-server/claude-worker.js, e.g.
+// "https://vortex-claude.yourname.workers.dev". It gets { idea } and answers with
+// { shape, size, main, textc, text, why: [] }, or { error } for an idea it won't make.
+// Until it's set (or if it's busy) the built-in helper runs instead.
 const AI_ENDPOINT = "";
 
 const $ = (id) => document.getElementById(id);
@@ -107,6 +109,7 @@ async function interpret(idea) {
     try {
       const res = await fetch(AI_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idea }) });
       const a = await res.json();
+      if (res.status === 422 && a.error) return { error: a.error }; // the AI kindly said no to this idea
       if (res.ok && VARIANTS[a.shape]?.[a.size] && colour(a.main)) {
         return { ...fromStored({ ...a, textc: colour(a.textc) ? a.textc : "Snow white", text: String(a.text ?? "").slice(0, 14) }), why: Array.isArray(a.why) ? a.why.map(String) : [] };
       }
@@ -171,6 +174,12 @@ async function run() {
   go.disabled = true;
   go.textContent = "Thinking…";
   const d = await interpret(idea);
+  if (d.error) {
+    $("idea-result").innerHTML = `<p class="idea-empty">${esc(d.error)}</p>`;
+    go.disabled = false;
+    go.textContent = "Make it a project";
+    return;
+  }
   const project = createProject({ name: projectName(d), idea, design: toStored(d) });
   showDesign(d, project);
   renderProjects();
