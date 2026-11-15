@@ -4,9 +4,9 @@
 const WIX_CLIENT_ID = "f74a8f97-ba38-4e11-abac-62fb8a213de5";
 const CATEGORY_SLUG = "fidget-toys";
 const WIX_STORES_APP_ID = "215238eb-22a5-4c36-9e7b-e7c08025e04e";
-// The Stripe checkout Worker (checkout-server/worker.js), e.g. "https://vortex-checkout.yourname.workers.dev".
-// While it's empty, Checkout uses the Wix checkout instead.
-const CHECKOUT_SERVER = "";
+// The Stripe checkout (functions/api/checkout.js, on this same site). Until its Stripe key is set
+// it answers "not set up" and Checkout falls back to the Wix checkout.
+const CHECKOUT_SERVER = "/api/checkout";
 
 // ---- client (visitor token = the shopper's cart) ---------------------------------------------
 const API = "https://www.wixapis.com";
@@ -262,18 +262,19 @@ async function checkoutUrl() {
   const raw = await getCurrentCartRaw();
   assertCheckoutable(raw);
   if (CHECKOUT_SERVER) {
-    // Stripe: the Worker reads this same cart from Wix (prices included) and returns a Stripe page.
+    // Stripe: the server reads this same cart from Wix (prices included) and returns a Stripe page.
     let res;
     try {
-      res = await fetch(`${CHECKOUT_SERVER.replace(/\/$/, "")}/checkout`, {
+      res = await fetch(CHECKOUT_SERVER, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ wixToken: await accessToken() }),
       });
     } catch { throw new Error("Checkout couldn't start. Please check your internet and try again."); }
-    const d = await res.json().catch(() => ({}));
-    if (!res.ok || !d.url) throw new Error(d.error || "Checkout couldn't start. Please try again.");
-    return d.url;
+    const d = await res.json().catch(() => null);
+    if (res.ok && d?.url) return d.url;
+    // a real Stripe problem; otherwise (not set up, or no server on this host) use the Wix checkout
+    if (d?.error && d.setup !== false) throw new Error(d.error);
   }
   const origin = window.location.origin;
   const res = await wixRequest("/headless/v1/redirect-session", {

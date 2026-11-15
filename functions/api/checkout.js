@@ -1,22 +1,25 @@
-// 3D Printed Designs checkout: a small Cloudflare Worker between the website and Stripe.
+// 3D Printed Designs checkout: a Cloudflare Pages Function (served at /api/checkout on the same
+// site, so it goes live with the website) between the website and Stripe.
 // The website keeps using its Wix cart. When a shopper presses Checkout, the page sends this
 // Worker the shopper's Wix visitor token. The Worker reads that cart straight from Wix (so the
 // prices always come from Wix and can't be changed in the browser), then opens a Stripe Checkout
 // page for exactly those items. Stripe takes the card, collects the delivery address and emails
 // the receipt. You see each order, with the names to print, in the Stripe dashboard.
 //
-// Settings (Cloudflare dashboard → the Worker → Settings → Variables and Secrets):
+// Settings (Cloudflare dashboard → Workers & Pages → vortex-site → Settings → Variables and Secrets,
+// for Production; redeploy after changing them):
 //   STRIPE_SECRET_KEY  secret: from dashboard.stripe.com/apikeys (starts with sk_live_ or sk_test_)
-//   SITE_URL           text (optional): where shoppers come back to, default https://meshcraze.com
-//   ALLOWED_ORIGINS    text (optional): comma-separated website addresses allowed to start a checkout,
-//                      default https://meshcraze.com,https://www.meshcraze.com,https://vortex-site-2oi.pages.dev
+//   SITE_URL           text (optional): where shoppers come back to, default the site itself
+//   ALLOWED_ORIGINS    text (optional): extra comma-separated website addresses allowed to start a
+//                      checkout; the site's own address always is
 //   SHIP_COUNTRIES     text (optional): two-letter country codes Stripe asks the address for,
 //                      default the EU countries plus GB, CH, NO, US and CA
 //   SHIPPING_FEE       text (optional): flat delivery price in the cart's currency, e.g. 4.50; default 0 (free)
 //   FREE_SHIPPING_FROM text (optional): order total from which delivery is free, e.g. 40
 //
-// Routes:
-//   POST /checkout  { wixToken }  →  { url }   (send the shopper to url)
+// Route:
+//   POST /api/checkout  { wixToken }  →  { url }   (send the shopper to url)
+//   Before STRIPE_SECRET_KEY is set it answers 503 { setup: false }, and the cart uses the Wix checkout.
 
 const WIX = "https://www.wixapis.com";
 const STRIPE = "https://api.stripe.com/v1";
@@ -26,10 +29,12 @@ const DEFAULT_COUNTRIES =
 // Currencies Stripe counts in whole units (no cents).
 const ZERO_DECIMAL = new Set(["BIF", "CLP", "DJF", "GNF", "JPY", "KMF", "KRW", "MGA", "PYG", "RWF", "UGX", "VND", "VUV", "XAF", "XOF", "XPF"]);
 
-export default {
-  async fetch(request, env) {
+export const onRequest = ({ request, env }) => handle(request, env);
+
+export async function handle(request, env) {
+    const url = new URL(request.url);
     const origin = request.headers.get("Origin") || "";
-    const allowed = (env.ALLOWED_ORIGINS || DEFAULT_ORIGINS).split(",").map((s) => s.trim().replace(/\/$/, "")).filter(Boolean);
+    const allowed = [url.origin, ...(env.ALLOWED_ORIGINS || DEFAULT_ORIGINS).split(",")].map((s) => s.trim().replace(/\/$/, "")).filter(Boolean);
     const cors = {
       "Access-Control-Allow-Origin": allowed.includes(origin) ? origin : allowed[0],
       "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -40,10 +45,9 @@ export default {
       new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
 
     if (request.method === "OPTIONS") return new Response(null, { headers: cors });
-    const url = new URL(request.url);
-    if (request.method !== "POST" || url.pathname !== "/checkout") return json({ error: "Not found." }, 404);
+    if (request.method !== "POST") return json({ error: "Not found." }, 404);
     if (origin && !allowed.includes(origin)) return json({ error: "Checkout isn't allowed from this site." }, 403);
-    if (!env.STRIPE_SECRET_KEY) return json({ error: "Payments aren't switched on yet. Please try again soon." }, 503);
+    if (!env.STRIPE_SECRET_KEY) return json({ setup: false, error: "Payments aren't switched on yet." }, 503);
 
     try {
       const { wixToken } = await request.json().catch(() => ({}));
@@ -64,7 +68,7 @@ export default {
 
       // 2. The Stripe Checkout page, one line per cart line, priced from Wix.
       const form = new URLSearchParams();
-      const site = (env.SITE_URL || "https://meshcraze.com").replace(/\/$/, "");
+      const site = (env.SITE_URL || url.origin).replace(/\/$/, "");
       form.set("mode", "payment");
       form.set("success_url", `${site}/thanks.html?order={CHECKOUT_SESSION_ID}`);
       form.set("cancel_url", `${site}/shop.html`);
@@ -118,8 +122,7 @@ export default {
       console.log("checkout error", e?.message);
       return json({ error: "Checkout couldn't start. Please try again in a minute." }, 500);
     }
-  },
-};
+}
 
 function text(t) {
   return typeof t === "string" ? t : t?.translated ?? t?.original ?? "";
