@@ -24,7 +24,8 @@ body.sun .create-hero h1 { font-size: clamp(2.3rem, 6vw, 3.6rem); margin: 0 0 10
 .chip:hover { border-color: var(--pop); }
 .idea-result { border-color: var(--pop); }
 .idea-empty { margin: auto; color: var(--muted); font-weight: 700; text-align: center; }
-.idea-card { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: center; }
+.idea-card { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: center; position: relative; }
+.idea-photo { position: absolute; left: 82px; top: 88px; width: 62px; height: 62px; object-fit: cover; border-radius: 12px; border: 2px solid var(--pop); box-shadow: 0 4px 12px rgba(0, 0, 0, .5); }
 .idea-card svg { width: 150px; height: 150px; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .45)); }
 .idea-card h3 { margin: 0 0 4px; font-size: 1.4rem; }
 .idea-card .big-price { font-family: "Baloo 2", sans-serif; font-size: 2rem; font-weight: 800; color: var(--neon); line-height: 1.1; }
@@ -72,3 +73,13 @@ body.sun .create-hero h1 { font-size: clamp(2.3rem, 6vw, 3.6rem); margin: 0 0 10
   .price-table { min-width: 0; }
   .price-table th, .price-table td { padding: 10px 8px; }
 }
+
+/* dragons, letters and organizers */
+.starter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
+.starter { display: grid; gap: 6px; padding: 10px; border-radius: 20px; background: rgba(15, 10, 28, .9); border: 2px solid var(--line); color: #fff; text-decoration: none; transition: border-color .15s, transform .15s; scroll-margin-top: 100px; }
+.starter:hover, .starter:focus-visible, .starter:target { border-color: var(--neon); transform: translateY(-3px); box-shadow: 0 0 16px rgba(57, 255, 20, .35); }
+.starter img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 14px; }
+.starter h3 { margin: 4px 4px 0; font-size: 1.2rem; }
+.starter .note { margin: 0 4px 4px; }
+.starter-credits { margin-top: 14px; }
+.starter-credits a { color: var(--pop); }
