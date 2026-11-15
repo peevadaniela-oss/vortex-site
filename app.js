@@ -4,6 +4,9 @@
 const WIX_CLIENT_ID = "f74a8f97-ba38-4e11-abac-62fb8a213de5";
 const CATEGORY_SLUG = "fidget-toys";
 const WIX_STORES_APP_ID = "215238eb-22a5-4c36-9e7b-e7c08025e04e";
+// The Stripe checkout (functions/api/checkout.js, on this same site). Until its Stripe key is set
+// it answers "not set up" and Checkout falls back to the Wix checkout.
+const CHECKOUT_SERVER = "/api/checkout";
 
 // ---- client (visitor token = the shopper's cart) ---------------------------------------------
 const API = "https://www.wixapis.com";
@@ -259,6 +262,21 @@ const removeLine = (lineItemId) => loud(async () => {
 async function checkoutUrl() {
   const raw = await getCurrentCartRaw();
   assertCheckoutable(raw);
+  if (CHECKOUT_SERVER) {
+    // Stripe: the server reads this same cart from Wix (prices included) and returns a Stripe page.
+    let res;
+    try {
+      res = await fetch(CHECKOUT_SERVER, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wixToken: await accessToken() }),
+      });
+    } catch { throw new Error("Checkout couldn't start. Please check your internet and try again."); }
+    const d = await res.json().catch(() => null);
+    if (res.ok && d?.url) return d.url;
+    // a real Stripe problem; otherwise (not set up, or no server on this host) use the Wix checkout
+    if (d?.error && d.setup !== false) throw new Error(d.error);
+  }
   const origin = window.location.origin;
   const res = await wixRequest("/headless/v1/redirect-session", {
     body: { ecomCheckout: { checkoutId: rid(raw) }, callbacks: { postFlowUrl: `${origin}/`, thankYouPageUrl: `${origin}/` } },
@@ -468,6 +486,12 @@ document.addEventListener("click", async (ev) => {
   }
 });
 $("drawer-bg").addEventListener("click", () => openCart(false));
+
+// Back from a paid Stripe checkout (thanks.html): forget the old visitor so the cart starts empty.
+if (document.body.dataset.paid === "true") {
+  memory = null;
+  try { localStorage.removeItem(STORAGE_KEY); } catch { /* no storage */ }
+}
 
 loadCategory("fidget-toys", "products", "cat-desc");
 loadCategory("customizable-items", "custom-products", "custom-desc");
