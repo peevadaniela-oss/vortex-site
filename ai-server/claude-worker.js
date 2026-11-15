@@ -5,7 +5,7 @@
 //
 // Settings (Cloudflare dashboard → the Worker → Settings → Variables and Secrets / Bindings):
 //   ANTHROPIC_API_KEY  secret: a key from platform.claude.com (Settings → API keys)
-//   ALLOWED_ORIGIN     text: the website address(es), comma separated, e.g. https://peevadaniela-oss.github.io
+//   ALLOWED_ORIGIN     text: the website address(es), comma separated, e.g. https://meshcraze.com,https://www.meshcraze.com
 //   LIMITS             KV namespace binding, used to count ideas per day (it can share the AI model maker's)
 //   MODEL              text (optional): the Claude model, default claude-haiku-5-5 (fast and very cheap)
 //   DAILY_LIMIT        text (optional): ideas per day for the whole site, default 500
