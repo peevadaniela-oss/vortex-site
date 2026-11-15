@@ -9,9 +9,9 @@ const AI_SERVER = "";
 // the "Custom AI 3D Print" product in Wix; prices must match the Wix variants
 const PRODUCT_ID = "b112e32a-f2c2-4051-a3c4-f3940e8c36d8";
 const SIZES = [
-  { name: "Small", mm: 40, variant: "d9e6c7ec-9b4e-4cdb-8d6a-738b940058df", price: 15 },
-  { name: "Medium", mm: 60, variant: "5c2af9a0-c98c-4506-9b5d-b317a220993e", price: 19 },
-  { name: "Large", mm: 90, variant: "ba2ddecb-09fc-483f-a204-335e70a0f852", price: 28 },
+  { name: "Small", mm: 40, variant: "d9e6c7ec-9b4e-4cdb-8d6a-738b940058df", price: 3.75 },
+  { name: "Medium", mm: 60, variant: "5c2af9a0-c98c-4506-9b5d-b317a220993e", price: 4.75 },
+  { name: "Large", mm: 90, variant: "ba2ddecb-09fc-483f-a204-335e70a0f852", price: 7 },
 ];
 const JOB_KEY = "vortex-ai-job";
 

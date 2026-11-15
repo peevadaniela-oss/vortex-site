@@ -5,15 +5,15 @@
 // change it here too (the cart always charges the Wix price).
 export const PRODUCT_ID = "1926535d-34f1-4e37-b695-87f22613a3c7";
 export const VARIANTS = {
-  tag:     { Small: ["72100d27-4718-4997-8cde-d96bc2900ab4", 10], Medium: ["475341e2-f485-4b14-baba-e5d29d716b51", 11], Large: ["177b5841-562b-426e-b67b-2d3e9aeb6643", 13] },
-  star:    { Small: ["0a28da68-c731-4805-b4a0-46e89df803ec", 11], Medium: ["85f489f9-9901-4a8f-81fc-ec17cffce6ca", 13], Large: ["d514d49f-8564-47ae-8997-bb8a2852b8a1", 16] },
-  heart:   { Small: ["85f68d66-39d4-4256-997e-75a7f0fac5c2", 11], Medium: ["606115d1-276f-49bf-b8f8-090a31831a02", 13], Large: ["8a79f5e7-5329-4225-ab89-0113e315ee8c", 16] },
-  spinner: { Small: ["00a0b7d1-adeb-40d3-8dc0-f3da97a23de0", 12], Medium: ["50bf1dca-1671-4293-a7c0-58776ced43db", 14], Large: ["6b312cb1-c602-4743-bed4-ea534f9084e4", 19] },
-  plate:   { Small: ["b2a12f99-c19b-4e7a-8295-baf9b2bd44d4", 13], Medium: ["4fc549ba-3365-42cf-b45d-a1b61ef53d81", 15], Large: ["e8d8e8fa-b148-4034-86ac-657bcd8cd062", 21] },
-  egg:     { Small: ["2e7902c5-03fb-4d46-9124-ab132fcec262", 12], Medium: ["4bee8d69-d91d-4148-b79b-a2712943bb65", 15], Large: ["ed488b00-5bab-43e0-a8ae-d4e8a6aa2cc4", 20] },
-  letter:  { Small: ["4763b8ed-71c2-4131-80f8-0e2b8cc53690", 20], Medium: ["3162d675-fb15-4795-929f-1faa98772788", 25], Large: ["f7d79cf4-4b3f-48fe-86fa-193031a7b4f8", 32] },
-  spike:   { Small: ["de5e2cff-9110-4a3c-9e26-a8cd7c753cac", 14], Medium: ["f2ed534a-8fcc-40cc-a11d-b994914928ee", 18], Large: ["ded634ca-0fe3-46b9-b340-45a688824ddd", 25] },
-  organizer: { Small: ["5b2a37b5-a3ca-4fc8-a9c8-31ebb08c9ca4", 22], Medium: ["143b661d-3d98-4f8b-a308-f5359f1f0208", 28], Large: ["453d350d-627d-419c-92c3-889c98940277", 36] },
+  tag:     { Small: ["72100d27-4718-4997-8cde-d96bc2900ab4", 2.5], Medium: ["475341e2-f485-4b14-baba-e5d29d716b51", 2.75], Large: ["177b5841-562b-426e-b67b-2d3e9aeb6643", 3.25] },
+  star:    { Small: ["0a28da68-c731-4805-b4a0-46e89df803ec", 2.75], Medium: ["85f489f9-9901-4a8f-81fc-ec17cffce6ca", 3.25], Large: ["d514d49f-8564-47ae-8997-bb8a2852b8a1", 4] },
+  heart:   { Small: ["85f68d66-39d4-4256-997e-75a7f0fac5c2", 2.75], Medium: ["606115d1-276f-49bf-b8f8-090a31831a02", 3.25], Large: ["8a79f5e7-5329-4225-ab89-0113e315ee8c", 4] },
+  spinner: { Small: ["00a0b7d1-adeb-40d3-8dc0-f3da97a23de0", 3], Medium: ["50bf1dca-1671-4293-a7c0-58776ced43db", 3.5], Large: ["6b312cb1-c602-4743-bed4-ea534f9084e4", 4.75] },
+  plate:   { Small: ["b2a12f99-c19b-4e7a-8295-baf9b2bd44d4", 3.25], Medium: ["4fc549ba-3365-42cf-b45d-a1b61ef53d81", 3.75], Large: ["e8d8e8fa-b148-4034-86ac-657bcd8cd062", 5.25] },
+  egg:     { Small: ["2e7902c5-03fb-4d46-9124-ab132fcec262", 3], Medium: ["4bee8d69-d91d-4148-b79b-a2712943bb65", 3.75], Large: ["ed488b00-5bab-43e0-a8ae-d4e8a6aa2cc4", 5] },
+  letter:  { Small: ["4763b8ed-71c2-4131-80f8-0e2b8cc53690", 5], Medium: ["3162d675-fb15-4795-929f-1faa98772788", 6.25], Large: ["f7d79cf4-4b3f-48fe-86fa-193031a7b4f8", 8] },
+  spike:   { Small: ["de5e2cff-9110-4a3c-9e26-a8cd7c753cac", 3.5], Medium: ["f2ed534a-8fcc-40cc-a11d-b994914928ee", 4.5], Large: ["ded634ca-0fe3-46b9-b340-45a688824ddd", 6.25] },
+  organizer: { Small: ["5b2a37b5-a3ca-4fc8-a9c8-31ebb08c9ca4", 5.5], Medium: ["143b661d-3d98-4f8b-a308-f5359f1f0208", 7], Large: ["453d350d-627d-419c-92c3-889c98940277", 9] },
 };
 
 // Medium-size plastic (g) and print time (h); the prices above were worked out from these.

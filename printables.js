@@ -14,7 +14,7 @@ const title = (text, y, size = 16) =>
   `<text x="${W / 2}" y="${y}" text-anchor="middle" font-family="${TITLE_FONT}" font-weight="800" font-size="${size}" fill="#fff" stroke="#1b1424" stroke-width="0.8" stroke-linejoin="round">${esc(text)}</text>`;
 const text = (str, x, y, size = 5, anchor = "middle", weight = 700) =>
   `<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="${BODY_FONT}" font-weight="${weight}" font-size="${size}" fill="#1b1424">${esc(str)}</text>`;
-const footer = () => text("Free printable from Vortex Toys · Merry Christmas!", W / 2, H - 8, 3.2, "middle", 600);
+const footer = () => text("Free printable from 3D Printed Designs · Merry Christmas!", W / 2, H - 8, 3.2, "middle", 600);
 
 function snowflake(x, y, r) {
   let d = "";
@@ -199,7 +199,7 @@ function printPage(p) {
   const fonts = document.querySelector('link[href*="fonts.googleapis.com/css2"]')?.href ?? "";
   const win = window.open("", "_blank");
   if (!win) return alert("Please allow pop-ups to print this page.");
-  win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(p.name)} · Vortex Toys</title>
+  win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(p.name)} · 3D Printed Designs</title>
     ${fonts ? `<link rel="stylesheet" href="${fonts}">` : ""}
     <style>@page { size: A4; margin: 0; } html, body { margin: 0; } svg { display: block; width: 210mm; height: 297mm; }</style>
     </head><body>${svg(p, currentName())}</body></html>`);
