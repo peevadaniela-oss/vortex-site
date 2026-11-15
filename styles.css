@@ -343,3 +343,56 @@ body.sun .ph { background: #1a1230; }
 /* Christmas link in the nav */
 nav a.nav-xmas { color: #ffd23f; }
 nav a.nav-xmas:hover, nav a.nav-xmas[aria-current="page"] { background: #d62828; color: #fff; }
+
+/* ===== Bigger scrolling (all pages) ===== */
+/* Thick scrollbar for computers and Android browsers that show one */
+html { scrollbar-width: auto; scrollbar-color: #9b5cff #120c22; }
+::-webkit-scrollbar { width: 18px; height: 18px; }
+::-webkit-scrollbar-track { background: #120c22; }
+::-webkit-scrollbar-thumb { background: linear-gradient(#9b5cff, #00e5ff); border-radius: 999px; border: 3px solid #120c22; min-height: 60px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(#b48aff, #39ff14); }
+
+/* Big drag handle on phones and tablets (bigscroll.js) */
+.big-scroll { position: fixed; right: 4px; top: 84px; bottom: 16px; width: 52px; z-index: 15; display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: .55; transition: opacity .25s; pointer-events: none; }
+.big-scroll[hidden] { display: none; }
+.big-scroll.awake, .big-scroll.dragging { opacity: 1; }
+.big-scroll > * { pointer-events: auto; }
+.big-scroll-step { width: 48px; height: 48px; border-radius: 50%; border: 2px solid #00e5ff; background: rgba(18, 12, 34, .9); color: #fff; font-size: 1.1rem; cursor: pointer; touch-action: manipulation; }
+.big-scroll-track { position: relative; flex: 1; width: 16px; border-radius: 999px; background: rgba(18, 12, 34, .55); pointer-events: none; }
+.big-scroll-thumb { position: absolute; top: 0; left: 50%; margin-left: -24px; width: 48px; height: 84px; border-radius: 999px; background: linear-gradient(#9b5cff, #00e5ff); border: 3px solid #fff; box-shadow: 0 0 16px rgba(0, 229, 255, .7); touch-action: none; cursor: grab; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; pointer-events: auto; }
+.big-scroll-thumb span { width: 20px; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, .9); }
+.big-scroll.dragging .big-scroll-thumb { cursor: grabbing; transform-origin: center; box-shadow: 0 0 26px rgba(57, 255, 20, .8); }
+.drawer.open ~ .big-scroll, body:has(.drawer.open) .big-scroll { display: none; }
+
+/* ===== Shop: side search and categories ===== */
+.shop-layout { display: grid; grid-template-columns: 250px 1fr; gap: 28px; align-items: start; }
+.shop-side { position: sticky; top: 92px; background: rgba(26, 18, 48, .92); border: 2px solid var(--brand); border-radius: 22px; padding: 18px; color: #fff; display: grid; gap: 14px; }
+.shop-side h2 { font-size: 1.3rem; margin: 0; color: #fff; }
+.side-search label { display: block; font-weight: 800; margin-bottom: 6px; }
+.side-search .search-box { position: relative; }
+.side-search input { width: 100%; font: inherit; font-size: 1.05rem; padding: 12px 42px 12px 14px; border-radius: 14px; border: 2px solid var(--pop); background: #0f0a1c; color: #fff; }
+.side-search input:focus { outline: none; border-color: var(--neon); box-shadow: 0 0 12px rgba(57, 255, 20, .5); }
+.side-search input::-webkit-search-cancel-button { display: none; }
+.search-clear { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--brand); color: #fff; font-size: 1.1rem; cursor: pointer; }
+.search-clear[hidden] { display: none; }
+.cat-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.cat-list button { width: 100%; text-align: left; font: inherit; font-weight: 800; font-size: 1.05rem; color: #fff; background: rgba(155, 92, 255, .18); border: 2px solid var(--line); border-radius: 14px; padding: 11px 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; min-height: 48px; }
+.cat-list button:hover { border-color: var(--pop); }
+.cat-list button[aria-pressed="true"] { background: var(--brand); border-color: var(--pop); box-shadow: 0 0 14px rgba(0, 229, 255, .5); }
+.cat-list .cat-icon { font-size: 1.3rem; line-height: 1; }
+.shop-main h1 { font-size: 2.4rem; margin: 0 0 8px; }
+.search-note { margin: 0 0 16px; font-weight: 700; }
+.search-note button { margin-left: 8px; }
+.search-note:empty { display: none; }
+
+@media (max-width: 860px) {
+  .shop-layout { grid-template-columns: 1fr; gap: 18px; }
+  .shop-side { position: static; }
+  .cat-list { grid-template-columns: repeat(2, 1fr); }
+  .cat-list button { justify-content: center; text-align: center; font-size: 1rem; padding: 10px; }
+  .shop-main h1 { font-size: 2rem; }
+}
+@media (pointer: coarse) {
+  /* leave room for the big scroll handle on the right */
+  .shop-layout, body > main > section > .wrap { padding-right: 60px; }
+}
