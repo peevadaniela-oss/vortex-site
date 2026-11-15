@@ -7,7 +7,7 @@
 <meta name="description" content="3D printed fidget toys for kids and families.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap">
-<link rel="stylesheet" href="styles.css?v=15">
+<link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body class="sun">
 <header class="site-header">
@@ -27,28 +27,26 @@
 
 <main>
   <section>
-    <div class="wrap">
-      <h1 style="font-size:2.4rem;margin:0 0 8px">Shop fidget toys</h1>
-      <a class="featured featured-wide" data-featured href="create.html#starters" aria-label="See our dragons, letters and organizers"></a>
-      <p class="lead" id="cat-desc">3D printed fidget toys for busy hands.</p>
-      <div class="grid" id="products"><p class="status">Loading toys…</p></div>
-    </div>
-  </section>
+    <div class="wrap shop-layout">
+      <aside class="shop-side" id="shop-side" aria-label="Find a toy">
+        <form class="side-search" role="search" id="toy-search-form">
+          <label for="toy-search">Search toys</label>
+          <div class="search-box">
+            <input type="search" id="toy-search" placeholder="Try dragon, cat, name…" autocomplete="off" enterkeyhint="search">
+            <button type="button" class="search-clear" id="search-clear" aria-label="Clear search" hidden>&times;</button>
+          </div>
+        </form>
+        <h2 id="cat-heading">Categories</h2>
+        <ul class="cat-list" id="cat-list" aria-labelledby="cat-heading"></ul>
+      </aside>
 
-  <section id="customizable">
-    <div class="wrap">
-      <h2 class="section-title">Customizable items</h2>
-      <p class="lead" id="custom-desc">Toys and decor 3D printed with your name on them.</p>
-      <div class="grid" id="custom-products"><p class="status">Loading…</p></div>
-    </div>
-  </section>
-
-  <section id="animals">
-    <div class="wrap">
-      <h2 class="section-title">Animals</h2>
-      <p class="lead" id="animal-desc">Flexi and articulated animals, printed to order in the colour you choose.</p>
-      <div class="grid" id="animal-products"><p class="status">Loading…</p></div>
-      <details class="credits note">
+      <div class="shop-main">
+        <h1 id="shop-title">All toys</h1>
+        <a class="featured featured-wide" data-featured href="create.html#starters" aria-label="See our dragons, letters and organizers"></a>
+        <p class="lead" id="cat-desc">3D printed toys for busy hands.</p>
+        <p class="search-note status" id="search-note" aria-live="polite"></p>
+        <div class="grid" id="products"><p class="status">Loading toys…</p></div>
+      <details class="credits note" id="animal-credits">
         <summary>Who designed these animals</summary>
         <p>These animals were designed by makers on MakerWorld who let us sell prints of them. Thank you!</p>
         <ul>
@@ -65,6 +63,7 @@
           <li>Cute Flexi Gecko: <a href="https://makerworld.com/en/models/3246041" target="_blank" rel="noopener">design</a> by SHF 3D, CC BY-SA 4.0</li>
         </ul>
       </details>
+      </div>
     </div>
   </section>
 </main>
@@ -86,6 +85,7 @@
 </aside>
 <script src="drips.js?v=6"></script>
 <script type="module" src="featured.js?v=1"></script>
-<script type="module" src="app.js?v=7"></script>
+<script src="bigscroll.js?v=1" defer></script>
+<script type="module" src="app.js?v=8"></script>
 </body>
 </html>

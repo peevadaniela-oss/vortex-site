@@ -398,16 +398,41 @@ function pickChoice(chip) {
   add.textContent = !v || v.inStock === false ? "Sold out" : "Add to cart";
 }
 
-async function loadCategory(slug, gridId, descId) {
-  const grid = $(gridId);
-  if (!grid) return;
+// ---- shop: side search + category menu --------------------------------------------------------
+const ALL_SLUG = "all-products";
+const CAT_ICONS = { "all-products": "🌈", "fidget-toys": "🌀", "animals": "🐾", "customizable-items": "✏️" };
+const HASH_ALIASES = { customizable: "customizable-items", all: ALL_SLUG, fidget: "fidget-toys" };
+// Used if Wix can't list the categories; the real list comes from the Wix dashboard.
+const FALLBACK_CATS = [
+  { slug: ALL_SLUG, name: "All toys" },
+  { slug: "fidget-toys", name: "Fidget Toys" },
+  { slug: "animals", name: "Animals" },
+  { slug: "customizable-items", name: "Customizable Items" },
+];
+const catCache = new Map();
+
+async function fetchCategories() {
   try {
+    const res = await wixRequest("/categories/v1/categories/query", {
+      body: { query: { cursorPaging: { limit: 100 } }, treeReference: { appNamespace: "@wix/stores" } },
+    });
+    const cats = (res?.categories ?? [])
+      .filter((c) => c.visible !== false && c.slug)
+      .sort((x, y) => (x.slug === ALL_SLUG ? -1 : y.slug === ALL_SLUG ? 1 : (x.parentCategory?.index ?? 99) - (y.parentCategory?.index ?? 99)))
+      .map((c) => ({ slug: c.slug, name: c.slug === ALL_SLUG ? "All toys" : c.name }));
+    if (!cats.some((c) => c.slug === ALL_SLUG)) cats.unshift(FALLBACK_CATS[0]);
+    return cats.length > 1 ? cats : FALLBACK_CATS;
+  } catch { return FALLBACK_CATS; }
+}
+
+async function fetchCategory(slug) {
+  if (catCache.has(slug)) return catCache.get(slug);
+  const job = (async () => {
     const cat = await wixRequest(`/categories/v1/categories/slug/${slug}`, {
       method: "GET",
       query: { "treeReference.appNamespace": "@wix/stores", fields: ["DESCRIPTION"] },
     });
     const category = cat?.category;
-    if (category?.description && $(descId)) $(descId).textContent = category.description;
     const res = await wixRequest("/stores/v3/products/search", {
       body: {
         fields: LIST_FIELDS,
@@ -419,10 +444,82 @@ async function loadCategory(slug, gridId, descId) {
     });
     const products = await Promise.all((res?.products ?? []).map(toSummary).map(withChoices));
     for (const p of products) shownProducts.set(p.id, p);
-    grid.innerHTML = products.length ? products.map(productCard).join("") : `<p class="status">New toys are on the printer. Check back soon!</p>`;
-  } catch (e) {
-    grid.innerHTML = `<p class="status error">We couldn't load the toys right now. Please refresh the page.</p>`;
+    return { description: category?.description ?? "", products };
+  })();
+  catCache.set(slug, job);
+  job.catch(() => catCache.delete(slug));
+  return job;
+}
+
+const plain = (s) => String(s ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+function initShop() {
+  const grid = $("products"), list = $("cat-list"), input = $("toy-search");
+  if (!grid || !list || !input) return;
+  let cats = FALLBACK_CATS, current = ALL_SLUG, loaded = null, token = 0;
+
+  const slugFromHash = () => {
+    const h = decodeURIComponent(location.hash.slice(1)).toLowerCase();
+    const slug = HASH_ALIASES[h] ?? h;
+    return cats.some((c) => c.slug === slug) ? slug : ALL_SLUG;
+  };
+  const catName = (slug) => cats.find((c) => c.slug === slug)?.name ?? "All toys";
+
+  function drawMenu() {
+    list.innerHTML = cats.map((c) => `
+      <li><button type="button" data-cat="${esc(c.slug)}" aria-pressed="${c.slug === current}">
+        <span class="cat-icon" aria-hidden="true">${CAT_ICONS[c.slug] ?? "⭐"}</span>${esc(c.name)}
+      </button></li>`).join("");
   }
+
+  function drawGrid() {
+    const note = $("search-note");
+    if (!loaded) return;
+    const q = plain(input.value.trim());
+    $("search-clear").hidden = !q;
+    const shown = q ? loaded.products.filter((p) => plain(p.name).includes(q)) : loaded.products;
+    if (!q) note.innerHTML = "";
+    else if (shown.length) note.textContent = `${shown.length} ${shown.length === 1 ? "toy matches" : "toys match"} “${input.value.trim()}”.`;
+    else note.innerHTML = `No toys called “${esc(input.value.trim())}” in ${esc(catName(current))}.${current !== ALL_SLUG ? ` <button class="btn secondary" type="button" data-search-all>Look in all toys</button>` : ""}`;
+    grid.innerHTML = shown.length
+      ? shown.map(productCard).join("")
+      : q ? "" : `<p class="status">New toys are on the printer. Check back soon!</p>`;
+  }
+
+  async function choose(slug, { keepHash = false } = {}) {
+    current = slug;
+    drawMenu();
+    $("shop-title").textContent = catName(slug);
+    if ($("animal-credits")) $("animal-credits").hidden = slug !== "animals" && slug !== ALL_SLUG;
+    if (!keepHash) history.replaceState(null, "", slug === ALL_SLUG ? location.pathname : `#${slug}`);
+    const mine = ++token;
+    loaded = null;
+    grid.innerHTML = `<p class="status">Loading toys…</p>`;
+    try {
+      const data = await fetchCategory(slug);
+      if (mine !== token) return;
+      loaded = data;
+      $("cat-desc").textContent = data.description || (slug === ALL_SLUG ? "Every 3D printed toy in the shop." : `3D printed ${catName(slug).toLowerCase()}.`);
+      drawGrid();
+    } catch {
+      if (mine === token) grid.innerHTML = `<p class="status error">We couldn't load the toys right now. Please refresh the page.</p>`;
+    }
+  }
+
+  list.addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-cat]");
+    if (!b) return;
+    choose(b.dataset.cat);
+    if (matchMedia("(max-width: 860px)").matches) $("shop-title").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  input.addEventListener("input", drawGrid);
+  $("toy-search-form").addEventListener("submit", (e) => { e.preventDefault(); input.blur(); drawGrid(); });
+  $("search-clear").addEventListener("click", () => { input.value = ""; drawGrid(); input.focus(); });
+  $("search-note").addEventListener("click", (e) => { if (e.target.closest("[data-search-all]")) choose(ALL_SLUG); });
+  addEventListener("hashchange", () => { const s = slugFromHash(); if (s !== current) choose(s, { keepHash: true }); });
+
+  drawMenu();
+  choose(slugFromHash(), { keepHash: true });
+  fetchCategories().then((c) => { cats = c; const s = slugFromHash(); if (s !== current) choose(s, { keepHash: true }); else { drawMenu(); $("shop-title").textContent = catName(current); } });
 }
 
 document.addEventListener("click", async (ev) => {
@@ -469,7 +566,5 @@ document.addEventListener("click", async (ev) => {
 });
 $("drawer-bg").addEventListener("click", () => openCart(false));
 
-loadCategory("fidget-toys", "products", "cat-desc");
-loadCategory("customizable-items", "custom-products", "custom-desc");
-loadCategory("animals", "animal-products", "animal-desc");
+initShop();
 readCart(await getCurrentCartRaw().catch(() => null)).then(renderCart).catch(() => {});
