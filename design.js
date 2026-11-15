@@ -74,7 +74,7 @@ $("text-input").addEventListener("input", (ev) => {
 
 const shapeOf = () => SHAPES.find((s) => s.key === state.shape);
 const sizeOf = () => SIZES.find((s) => s.name === state.size);
-const money = (n) => new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+const money = (n) => new Intl.NumberFormat(undefined, { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
 function printTime(h) {
   const mins = Math.round((h * 60) / 5) * 5;
   return mins < 60 ? `${mins} min` : `${Math.floor(mins / 60)} h${mins % 60 ? ` ${mins % 60} min` : ""}`;

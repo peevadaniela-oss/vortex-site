@@ -17,7 +17,7 @@ const JOB_KEY = "vortex-ai-job";
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const money = (n) => new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+const money = (n) => new Intl.NumberFormat(undefined, { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const state = { size: "Medium", colour: COLOURS[0], job: null, ready: false };

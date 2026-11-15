@@ -9,7 +9,7 @@ const AI_ENDPOINT = "";
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const money = (n) => new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+const money = (n) => new Intl.NumberFormat(undefined, { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
 const designLink = (d) => `design.html?${new URLSearchParams({ shape: d.shape, size: d.size, main: d.main.name, textc: d.textColour.name, text: d.text })}`;
 const shapeName = (key) => SHAPES.find((s) => s.key === key).name;
 
