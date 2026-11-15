@@ -40,6 +40,7 @@
   const peek = section.querySelector(".toy-peek");
   const card = peek.querySelector(".toy-peek-card");
   const tag = peek.querySelector(".toy-peek-tag");
+  const photo = peek.querySelector(".toy-peek-photo");
   const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   if (!fine) return;
   let tx = 0, ty = 0, px = 0, py = 0, on = false;
@@ -49,6 +50,10 @@
       on = true;
       card.style.setProperty("--peek", a.dataset.color);
       tag.textContent = a.dataset.tag;
+      // A link with data-photo shows that picture; the rest keep the placeholder.
+      photo.classList.toggle("has-photo", !!a.dataset.photo);
+      photo.style.backgroundImage = a.dataset.photo ? `url("${a.dataset.photo}")` : "";
+      photo.textContent = a.dataset.photo ? "" : "Photo coming soon";
       peek.classList.add("show");
     });
     a.addEventListener("pointerleave", () => { on = false; peek.classList.remove("show"); });

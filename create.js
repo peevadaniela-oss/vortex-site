@@ -21,9 +21,25 @@ $("price-table").innerHTML = `
       <td><a href="design.html?shape=${sh.key}&size=${s.name}">${money(VARIANTS[sh.key][s.name][1])}</a></td>`).join("")}</tr>`).join("")}
   </tbody>`;
 
+// ---- the four photo shapes: dragons, letters and organizers --------------------------------------
+const STARTERS = SHAPES.filter((s) => s.photo);
+$("starter-grid").innerHTML = STARTERS.map((s) => `
+  <a class="starter" id="starter-${s.key}" href="design.html?shape=${s.key}">
+    <img src="${esc(s.photo)}" alt="${esc(s.credit ? `${s.name} by ${s.credit.by}` : `A ${s.name.toLowerCase()} we printed`)}" loading="lazy">
+    <h3>${esc(s.name)}</h3>
+    <span class="note">From ${money(VARIANTS[s.key].Small[1])}</span>
+  </a>`).join("");
+$("starter-credits").innerHTML = STARTERS.filter((s) => s.credit).map((s) => `The ${esc(s.name.toLowerCase())} is
+  <a href="${esc(s.credit.model)}" target="_blank" rel="noopener">designed by ${esc(s.credit.by)}</a>
+  (<a href="${esc(s.credit.profile)}" target="_blank" rel="noopener">profile</a>), shared under ${esc(s.credit.licence)}; the designer gives us the right to sell prints of it.`).join(" ");
+
 // ---- built-in helper ------------------------------------------------------------------------------
 // Reads the words people use for shapes, sizes and colours, and a name or short word to print.
 const SHAPE_WORDS = [
+  ["organizer", /\b(organi[sz]ers?|pencils?|pens?|stationery|pen ?holder|pencil ?pot)\b/],
+  ["spike", /\b(spik(e|y|es)|serpents?|snakes?|articulated|flexi)\b/],
+  ["egg", /\b(dragons?|eggs?|dino(saur)?s?)\b/],
+  ["letter", /\b(letters?|initials?|monogram|alphabet)\b/],
   ["spinner", /\b(fidget|spinner|spin|spinny)\b/],
   ["plate", /\b(name ?plate|plaque|sign|door|desk|plate|shelf)\b/],
   ["tag", /\b(key ?chain|key ?ring|keys?|tag|bag|backpack|zipper)\b/],
@@ -89,6 +105,12 @@ function ideaToDesign(idea) {
   return { shape, size, main, textColour, text, why };
 }
 
+// a real print of that shape, for the shapes we have photos of
+function photoOf(key) {
+  const sh = SHAPES.find((s) => s.key === key);
+  return sh.photo ? `<img class="idea-photo" src="${esc(sh.photo)}" alt="A real ${esc(sh.name.toLowerCase())} we printed" loading="lazy">` : "";
+}
+
 function previewSvg(d) {
   const sh = SHAPES.find((s) => s.key === d.shape);
   const words = d.text ? `<text x="12" y="12.6" text-anchor="middle" dominant-baseline="middle" font-family="Baloo 2, sans-serif" font-weight="800"
@@ -119,6 +141,7 @@ function showDesign(d, project) {
   $("idea-result").innerHTML = `
     <div class="idea-card">
       ${previewSvg(d)}
+      ${photoOf(d.shape)}
       <div>
         <span class="sub">${project ? "New project" : "Your starting design"}</span>
         <h3>${esc(project ? project.name : `${d.size} ${shapeName(d.shape).toLowerCase()}`)}</h3>
