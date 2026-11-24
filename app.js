@@ -438,7 +438,7 @@ document.addEventListener("click", async (ev) => {
     const cardError = card?.querySelector(".card-error");
     const fields = {};
     let missing = "";
-    for (const input of card?.querySelectorAll("input[data-key]") ?? []) {
+    for (const input of card?.querySelectorAll("input[data-key], select[data-key]") ?? []) {
       const value = input.value.trim();
       if (value) fields[input.dataset.key] = value;
       else if (input.dataset.required === "true") missing ||= "Please type the name you want printed.";
